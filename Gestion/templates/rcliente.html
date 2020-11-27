@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Feria Virtual</title>
+	<meta charset="UTF-8">
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"   >
+
+	<link href="{% static 'css/esadmin.css' %}" rel="stylesheet">
+	
+</head>
+<body>
+	<div class="contenedor">
+		<br>  <br>
+		<br>  <br>
+		  <form action="" method="POST" class="form-register">
+			{% csrf_token %}
+
+			  <h2 class="form__titulo">Formulario de Registro</h2>
+			  <div class= "contenedor-inputs">
+				{% for p in verid %}
+				<label>Su Id es: </label>	 
+				 	<input type="text"  value="{{p.0}}" name="idcliente" placeholder="{{p.0}}" class="input-100" disabled>
+                    <div class="table_itemproductor">{{p.0}}</div> 
+                {% endfor %}
+				  <input type="text"  value="{{p.0}}" name="idcliente" placeholder="ingrese el numero <<" class="input-100" required="">	 
+				  <input type="text" name="rut" placeholder="Rut sin guiones" class="input-100" required="">
+				  <input type="text" name="appaterno" placeholder="Apellido Paterno" class="input-100" required="">
+				  <input type="text" name="apmaterno" placeholder="Apellido Materno" class="input-100" required="">	
+				  <input type="text" name="nombres" placeholder="Nombres" class="input-100" required="">
+				  <input type="text" name="direccion" placeholder="Direcion" class="input-100" required="">	
+				  <input type="text" name="telefono" placeholder="telefono" class="input-100" required="">		
+				  <input type="email" name="correo" placeholder="Correo" class="input-100" required="" disabled="disabled" value="{{user.email}}">
+
+
+				  <br>  <br>
+				  <br>  <br>
+				 
+				  <select class="input-60" name="pais" required="">
+					  <option value="">Seleccione pais</option>
+						{% for c in mostrarr %}
+					
+							<option value="{{c.0}}">{{c.1}}</option>
+						{% endfor %}
+				  </select> 
+
+				  <select class="input-60" name="id_rol" required="">
+					<option value="">Seleccione Rol</option>
+					  {% for c in mostrarrol %}
+				  
+						  <option value="{{c.0}}">{{c.1}}</option>
+					  {% endfor %}
+				</select> 
+				  <br>  <br>
+				  <br>  <br>
+					 <p class ="form__link">¿Ya tienes una cuenta? <a href="{% url 'index' %}">Ingresa aqui</a></p>
+				  <input type="submit" value="Registrar" class="btn-enviar">
+				  
+	  
+			  </div>
+		  </form>
+		  {{mensaje}}
+		
+	</div>
+
+</body>
+</html>

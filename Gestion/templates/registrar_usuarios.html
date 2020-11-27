@@ -1,0 +1,88 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="container" >
+        <section class="content-section" id="portfolio">
+            <form method="POST">
+            <h2>Actualizar usuario</h2>
+            {% csrf_token %}
+                
+            <!-- Modificar, se agrega value para traer los datos-->
+            <input type="hidden" name="username" id="username" value="{{ usuario.username }}">
+
+            <div class="row">
+                <div class="col">
+                    <label for="id_rut">Rut:</label>
+                    <input type="text" name="rut_usuario"  class="form-control" required id="id_rut" value="{{ usuario.rut_usuario }}">
+                </div><br>
+                <div class="col">
+                    <label for="id_ap_paterno">Apellido Paterno:</label>
+                    <input onkeypress="return soloLetras(event)" type="text" name="ap_paterno" class="form-control" required id="id_ap_paterno" value="{{ usuario.ap_paterno }}">
+                </div><br>
+                <div class="col">
+                    <label for="id_ap_materno">Apellido Materno:</label>
+                    <input onkeypress="return soloLetras(event)" type="text" name="ap_materno" class="form-control" required id="id_ap_materno" value="{{ usuario.ap_materno }}">
+                </div><br>
+                <div class="col">
+                    <label for="id_nombres">Nombres:</label>
+                    <input onkeypress="return soloLetras(event)"  type="text" name="nombres"  class="form-control" required id="id_nombres" value="{{ usuario.nombres }}">
+                </div><br>
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <label for="id_direccion">Direccion:</label>
+                    <input type="text" name="direccion"  class="form-control" required id="id_direccion" value="{{ usuario.direccion }}">
+                </div>
+                <div class="col">
+                    <label for="id_id_pais">Pais:</label>
+                    <select  name="id_pais" class="form-control" required id="id_id_pais">
+                        {% for g in pais %}
+                            <option id="id_id_pais" value="{{ g.id_pais }}">{{ g.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="id_fono">Celular:</label>
+                    <input type="text" name="fono" class="form-control" required id="id_fono" value="{{ usuario.fono }}">
+                </div>
+                <div class="col">
+                    <label for="id_email">Email:</label>
+                    <input type="email" name="email" class="form-control" required id="id_email" value="{{ usuario.email }}">
+                </div>
+                <div class="col">
+                    <label for="id_id_rol">Rol:</label>
+                    <select  name="id_rol" class="form-control" required id="id_id_rol">
+                        {% for g in group %}
+                            <option id="id_id_rol" value="{{ g.id_rol }}">{{ g.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>    
+            </div>    
+            <div class="row">
+                    <div class="col">
+                        <label for="id_username">Nombre de usuario:</label>
+                        <input type="text" name="username" class="form-control" maxlength="150" autofocus required id="id_username" value="{{ usuario.username }}">
+                    </div>
+                    <div class="col">
+                        <label for="id_contrasena">Contraseña:</label>
+                        <input type="password" name="contrasena" class="form-control" required id="id_contrasena" value="{{ usuario.contrasena }}">
+                    </div>
+                <div class="col">
+                    <button type="submit" style="margin-top: 30px;" class="btn btn-primary">Actualizar</button>
+                </div>
+            </div>
+            </form>
+        </section>         
+    </div>
+
+    {% endblock content %}
+</body>
+</html>

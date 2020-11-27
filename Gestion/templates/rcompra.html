@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        
+    <link rel="stylesheet" href="{% static 'css/estilocarros.css' %}">
+
+   
+    <title>Feria Virtual</title>
+</head>
+
+<body>
+
+    
+    <header>
+        <div class="container">
+            <h1 class="text-center">Pedido Feria Virtual</h1>
+            <hr>
+        </div>
+    </header>
+    <!-- START SECTION STORE -->
+    
+    <!-- END SECTION STORE -->
+    <!-- START SECTION SHOPPING CART -->
+    <section class="shopping-cart">
+        <div class="container">
+            <h1 class="text-center">Ingresar Compra Cliente Externo</h1>
+            <hr>
+
+            <form action="/rcompra/" method="POST">
+                {% csrf_token %}
+                <div class="form-group row">
+                    <label for="id_id_usuario" class="col-12 col-md-2 col-form-label h2">Usuario :</label>  
+                    <div class="col">
+                        <select  name="id_usuario" class="form-control" required id="id_id_usuario">
+                            {% for g in usuario %}
+                                <option id="id_id_usuario" value="{{ g.id_usuario }}">{{ g.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            <div class="form-group row">
+                <label for="id_fecha_pedido" class="col-12 col-md-2 col-form-label h2">Fecha Pedido:</label>
+                <div class="col-12 col-md-10">
+                    <input type="date" class="form-control" id="id_fecha_peido" name="fecha_pedido">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_nombre_destinatario" class="col-12 col-md-2 col-form-label h2">Nombre destinatario :</label>
+                <div class="col-12 col-md-10">
+                    <input type="text" class="form-control" id="id_nombre_destinatario" name="nombre_destinatario">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_id_pais" class="col-12 col-md-2 col-form-label h2">Pais :</label>  
+                <div class="col">
+                    <select  name="id_pais" class="form-control" required id="id_id_pais">
+                        {% for g in pais %}
+                            <option id="id_id_pais" value="{{ g.id_pais }}">{{ g.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_ciudad" class="col-12 col-md-2 col-form-label h2">Ciudad :</label>
+                <div class="col-12 col-md-10">
+                    <input type="text" class="form-control" id="id_ciudad" name="ciudad_destinatario">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_direccion" class="col-12 col-md-2 col-form-label h2">Direccion :</label>
+                <div class="col-12 col-md-10">
+                    <input type="text" class="form-control" id="id_direccion" name="direccion_destinatario">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_fono" class="col-12 col-md-2 col-form-label h2">Telefono :</label>
+                <div class="col-12 col-md-10">
+                    <input type="text" class="form-control" id="id_fono" name="fono_destinatario">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_id_camion" class="col-12 col-md-2 col-form-label h2">Camion :</label>
+                <div class="col">
+                    <select  name="id_camion" class="form-control" required id="id_id_camion">
+                        {% for g in camion %}
+                            <option id="id_id_camion" value="{{ g.id_camion }}">{{ g.patente }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="id_estado_pedido" class="col-12 col-md-2 col-form-label h2">Estado pedio :</label>
+                <div class="col-12 col-md-10">
+                    <input type="text" class="form-control" readonly="readonly"   value="1" id="id_estado_pedido" name="estado_pedido">
+                </div>
+            </div>
+            <input type="submit" value="Ingresar Solicitud">
+             </form>
+        </div>
+
+    </section>
+    <!-- END SECTION SHOPPING CART -->
+
+
+    <!-- START FOOTER -->
+    <footer class="bg-dark p-3 mt-5">
+        <p class="text-center m-0 text-muted">Feria Virtual Frutas de Primera Calidad</p>
+    </footer>
+    <!-- END FOOTER -->
+
+
+
+
+    <!-- SCRIPTS -->
+    <script src="//code.jquery.com/jquery-3.5.1.slim.min.js"  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="//stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+    <script src="../static/js/tienda.js"></script>
+
+
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js"></script>
+
+    
+</body>
+
+</html>

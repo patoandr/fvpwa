@@ -1,0 +1,81 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container" >  
+        <section class="content-section" id="portfolio">
+            <h2>Registrar Transporte</h2><br>
+            <form method="POST">{% csrf_token %} 
+                <div class="row">
+                <div class="col">    
+                    <label for="id_id_usuario">Transportista:</label>
+                    <select name="id_usuario" required id="id_id_usuario" class="form-control" readonly="readonly">
+                        {% for g in usuario %}
+                        <option id="id_id_usuario" value="{{ g.pk }}">{{ g.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">   
+                    <label for="id_nombre">Nombre Camión:</label>
+                    <input type="text" name="nombre" placeholder="Ingresar nombre" required id="id_nombre" class="form-control">
+                </div>  
+                <div class="col">
+                    <label for="id_patente">Patente:</label>
+                    <input type="text" name="patente" required id="id_patente" class="form-control">
+                </div>
+                
+                </div><br>
+                
+                <div class="row">            
+                                                    
+                <div class="col">   
+                    <label for="id_descripcion">Descripción:</label>
+                    <input type="text" name="descripcion" required id="id_descripcion" class="form-control">
+                </div>  
+                <div class="col">    
+                    <label for="id_tamano">Tamaño:</label>
+                    <input type="text" name="tamano" placeholder="Tamaño largo del camión" required id="id_tamano" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="id_capacidad_carga">Capacidad de carga:</label>
+                    <input type="text" name="capacidad_carga" placeholder="Capacidad en KG" required id="id_capacidad_carga" class="form-control">
+                </div>
+                </div><br>
+                <div class="row">
+                <div class="col">    
+                    <button type="submit" style="margin-top: 30px;" class="save btn btn-primary">Guardar</button>
+                </div>
+                </div><br>  
+            </form>
+        </section>        
+        
+        <section>
+            <h2>Productos</h2>
+            
+            <table class="table table-resposive-lg table table-striped table-hover">
+                <!-- <thead class="thead-light"> -->
+                    <tr>
+                        <th>NOMBRE CAMION</th>
+                        <th>PATENTE</th>
+                        <th>TAMAÑO DEL CAMION</th>
+                        <th>CAPACIDAD CARGA</th>
+
+                    </tr>
+                    
+                <!-- </thead>  -->
+                
+                {% for a in camion %}                   
+                    <tr>
+                        <td>{{a.nombre}}</td>
+                        <td>{{a.patente}}</td>
+                        <td>{{a.tamano}}</td>
+                        <td>{{a.capacidad_carga}}-KG</td>
+
+                    </tr> 
+                {% endfor %}
+                                            
+            </table>
+            
+        </section>	                
+    </div>
+
+{% endblock content %}

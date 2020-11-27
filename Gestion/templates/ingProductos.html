@@ -1,0 +1,110 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="container" >  
+        <section class="content-section" id="portfolio">
+            <h2>Registrar Producto</h2><br>
+            <form method="POST">{% csrf_token %} 
+                <div class="row">
+                <!-- <div class="col">
+                    <label for="id_id_producto">Id:</label>
+                    <input type="number" name="id_producto" min="-9223372036854775808" max="9223372036854775807" required id="id_id_producto" class="form-control">
+                </div> -->
+                <div class="col">    
+                    <label for="id_id_usuario">Proveedor:</label>
+                    <select name="id_usuario" required id="id_id_usuario" class="form-control" readonly="readonly">
+                        {% for g in proveedor %}
+                        <option id="id_id_usuario" value="{{ g.pk }}">{{ g.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="id_id_nombre">Producto:</label>
+                    <select name="id_nombre" required id="id_id_nombre" class="form-control">
+                        {% for g in nombre %}
+                        <option id="id_id_nombre" value="{{ g.pk }}">{{ g.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>   
+                </div><br>
+                <div class="row">            
+                <div class="col">
+                    <label for="id_id_calidad">Calidad:</label>
+                    <select name="id_calidad" required id="id_id_calidad" class="form-control">
+                        {% for g in calidad %}
+                        <option id="id_id_calidad" value="{{ g.pk }}">{{ g.nombre_calidad }}</option>
+                        {% endfor %}
+                    </select>
+                </div>                                                         
+                <div class="col">   
+                    <label for="id_kilos_producto">Kilos Producto:</label>
+                    <input type="text" name="kilos_producto" required id="id_kilos_producto" class="form-control">
+                </div>  
+                <div class="col">    
+                    <label for="id_stock_producto">Stock Producto:</label>
+                    <input type="text" name="stock_producto" required id="id_stock_producto" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="id_precio_producto">Precio Producto:</label>
+                    <input type="text" name="precio_producto" required id="id_precio_producto" class="form-control">
+                </div>
+                </div><br>
+                <div class="row">
+                <!-- <div class="col">
+                    <label for="id_fecha_ingreso">Fecha Ingreso:</label>
+                    <input type="date" name="fecha_ingreso" required id="id_fecha_ingreso" class="form-control">
+                </div>   -->
+                <!-- <div class="col">    
+                    <label for="id_fecha_actualizada">Fecha actualizada:</label>
+                    <input type="date" name="fecha_actualizada" id="id_fecha_actualizada" class="form-control">
+                </div>  -->
+                <div class="col">    
+                    <button type="submit" style="margin-top: 30px;" class="save btn btn-primary">Guardar</button>
+                </div>
+                </div><br>  
+            </form>
+        </section>        
+        
+        <section>
+            <h2>Productos</h2>
+            
+            <table class="table table-resposive-lg table table-striped table-hover">
+                <!-- <thead class="thead-light"> -->
+                    <tr>
+                        <th>ID</th>
+                        <th>PRODUCTO</th>
+                        <th>CALIDAD</th>
+                        <th>PRECIO</th>
+                        <th>STOCK</th>
+                        <th>FECHA DE INGRESO</th>
+                    </tr>
+                    
+                <!-- </thead>  -->
+                
+                {% for a in producto %}                   
+                    <tr>
+                        <td>{{a.id_producto}}</td>
+                        <td>{{a.id_nombre}}</td>
+                        <td>{{a.id_calidad}}</td>	
+                        <td>${{a.precio_producto}}</td>                                
+                        <td>{{a.stock_producto}}</td>
+                        <td>{{a.fecha_ingreso}}</td>
+                    </tr> 
+                {% endfor %}
+                                            
+            </table>
+            
+        </section>	                
+    </div>
+
+    {% endblock content %}
+</body>
+</html>

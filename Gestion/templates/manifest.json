@@ -1,0 +1,13 @@
+{
+    "name": "Feria Virtual",
+    "short_name": "Feria Virtual",
+    "description": "Aplicacion PWA Feria Virtual",
+    "background_color": "#FFF",
+    "theme_color": "",
+    "orientation": "portrait",
+    "display": "standalone",
+    "start_url": "./menu.html?utm_source=web_app_manifest",
+    "scope": "./",
+    "lang": "es-mx"
+
+}

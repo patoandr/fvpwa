@@ -1,0 +1,355 @@
+{% extends 'index.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Feria Virtual</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %} " rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="{% static 'css/stylish-portfolio.min.css' %}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+  <!-- Navigation -->
+  <a class="menu-toggle rounded" href="#">
+    <i class="fas fa-bars"></i>
+  </a>
+  
+  {% block content %}
+  
+        <!-- Rol Administrador -->
+        {% for groups in request.user.groups.values_list %}
+        {% for group in groups %}
+        {% if group == 'Administrador'%} 
+
+  <!-- Portfolio -->
+  <section class="content-section" id="portfolio">
+    <div class="container">
+      <div class="content-section-heading text-center">
+        <h3 class="text-secondary mb-0">Bienvenid@ {{ user.username}}</h3>
+        <!--LA idea aqui es que salga el rol del usuario-->
+        <h2 class="mb-5">Administración</h2>
+      </div>
+      <div class="row no-gutters">
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="{% url 'rcompra' %}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Ingresar Proceso de Ventas</b></div>
+                <p class="mb-0">Aqui puede ingresar los pedidos</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="#!">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Subasta de Transporte</b></div>
+                <p class="mb-0">Ver la mejor opcion para el delivery</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="{% url 'usuarios' %}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Mantenedor de Usuarios</b></div>
+                <p class="mb-0">Creación de perfiles de usuarios y asignacion de roles</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-2.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="{% url 'contratos' %}">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Contratos</b></div>
+                <p class="mb-0">Ingresar un contrato, editar y eliminar</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-3.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="#">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Ventas Locales</b></div>
+                <p class="mb-0">Ventas dentro del pais</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="#">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Notificar Resultados</b></div>
+                <p class="mb-0">Enviar corres con resultados</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="#">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Distribucion de Pagos</b></div>
+                <p class="mb-0">Distribuir pago sobre los involucrados</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="#">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3"><b>Crean Informe</b></div>
+                <p class="mb-0">Informe de clientes</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-sm-4">
+          <a class="portfolio-item" href="#">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h3">Publicar ventas<b></b></div>
+                <p class="mb-0"></p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {%endif%}
+  {% endfor %}
+  {% endfor %}
+
+
+<!-- Rol Proveedor -->
+{% for groups in request.user.groups.values_list %}
+{% for group in groups %}
+{% if group == 'Proveedor'%} 
+
+<section class="content-section" id="portfolio">
+  <div class="container">
+    <div class="content-section-heading text-center">
+      <h3 class="text-secondary mb-0">Bienvenid@ {{ user.username}}</h3>
+      <!--La idea aqui es que salga el rol del usuario-->
+      <h2 class="mb-5">Proveedor</h2>
+    </div>
+    <div class="row no-gutters justify-content-center align-items-center">
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url 'ingProductos' %}">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Ingresar Productos</b></div>
+              <p class="mb-0">Ingresa productos a la venta</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endif%}
+{% endfor %}
+{% endfor %}
+
+<!-- Rol Cliente externo -->
+{% for groups in request.user.groups.values_list %}
+{% for group in groups %}
+{% if group == 'Cliente Externo'%} 
+
+<section class="content-section" id="portfolio">
+  <div class="container">
+    <div class="content-section-heading text-center">
+      <h3 class="text-secondary mb-0">Bienvenid@ {{ user.username}}</h3>
+      <!--La idea aqui es que salga el rol del usuario-->
+      <h2 class="mb-5">Cliente externo</h2>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url 'feriacarro' %}">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Crear nuevo pedido</b></div>
+              <p class="mb-0">Solicita tus productos</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="#!">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Ver Estado</b></div>
+              <p class="mb-0">Mira aqui, el estado de tu pedido</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endif%}
+{% endfor %}
+{% endfor %}
+
+<!-- Rol Cliente interno -->
+{% for groups in request.user.groups.values_list %}
+{% for group in groups %}
+{% if group == 'Cliente Interno'%} 
+
+<section class="content-section" id="portfolio">
+  <div class="container">
+    <div class="content-section-heading text-center">
+      <h3 class="text-secondary mb-0">Bienvenid@ {{ user.username}}</h3>
+      <!--La idea aqui es que salga el rol del usuario-->
+      <h2 class="mb-5">Cliente Interno</h2>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url 'feriacarro' %}">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Crear nuevo pedido</b></div>
+              <p class="mb-0">Solicita tus productos</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="#!">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Ver Estado</b></div>
+              <p class="mb-0">Mira aqui, el estado de tu pedido</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endif%}
+{% endfor %}
+{% endfor %}
+
+<!-- Rol Transportista -->
+{% for groups in request.user.groups.values_list %}
+{% for group in groups %}
+{% if group == 'Transportista'%} 
+
+<section class="content-section" id="portfolio">
+  <div class="container">
+    <div class="content-section-heading text-center">
+      <h3 class="text-secondary mb-0">Bienvenid@ {{ user.username}}</h3>
+      <!--La idea aqui es que salga el rol del usuario-->
+      <h2 class="mb-5">Transportista</h2>
+    </div>
+    <div class="row no-gutters justify-content-center align-items-center">
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="{% url 'transportista' %}">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Ingrasar Camion</b></div>
+              <p class="mb-0">Aquí podrás ingrasar un camión para tus transportes</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endif%}
+{% endfor %}
+{% endfor %}
+
+<!-- Rol Consultor -->
+{% for groups in request.user.groups.values_list %}
+{% for group in groups %}
+{% if group == 'Consultor'%} 
+
+<section class="content-section" id="portfolio">
+  <div class="container">
+    <div class="content-section-heading text-center">
+      <h3 class="text-secondary mb-0">Bienvenid@ {{ user.username}}</h3>
+      <!--La idea aqui es que salga el rol del usuario-->
+      <h2 class="mb-5">Consultor</h2>
+    </div>
+    <div class="row no-gutters justify-content-center align-items-center">
+      <div class="col-lg-6">
+        <a class="portfolio-item" href="#!">
+          <div class="caption">
+            <div class="caption-content">
+              <div class="h2"><b>Reporte de Ventas</b></div>
+              <p class="mb-0">Ver ventas realizadas durante el año</p>
+            </div>
+          </div>
+          <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%endif%}
+{% endfor %}
+{% endfor %}
+
+
+  {% endblock %}  
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="{% static 'js/stylish-portfolio.min.js' %}"></script> -->
+
+</body>
+
+</html>

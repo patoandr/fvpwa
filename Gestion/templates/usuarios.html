@@ -1,0 +1,208 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block content %}
+    <script>
+        function myFunction() {
+  // Declare variables 
+  var input, filter, table, tr, td, i, j, visible;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    visible = false;
+    /* Obtenemos todas las celdas de la fila, no sólo la primera */
+    td = tr[i].getElementsByTagName("td");
+    for (j = 0; j < td.length; j++) {
+      if (td[j] && td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+        visible = true;
+      }
+    }
+    if (visible === true) {
+      tr[i].style.display = "";
+    } else {
+      tr[i].style.display = "none";
+    }
+  }
+}
+    </script>
+    
+    
+    <div class="container" >
+        <section class="content-section" id="portfolio">
+            <h2>Registrar usuario</h2>
+            <!-- {% if msn %}
+            <h3 style="color: red;">{{msn}}</h3>
+            {% endif %} -->
+            <form method="POST"> 
+            {% csrf_token %}
+            <div class="row">
+                <div class="col">
+                    <label for="id_rut">Rut:</label>
+                    <input type="text" name="rut_usuario"  class="form-control" required id="id_rut">
+                </div><br>
+                <div class="col">
+                    <label for="id_ap_paterno">Apellido Paterno:</label>
+                    <input onkeypress="return soloLetras(event)" type="text" name="ap_paterno" class="form-control" required id="id_ap_paterno">
+                </div><br>
+                <!-- <div class="col">
+                    <label for="id_ap_materno">Apellido Materno:</label>
+                    <input onkeypress="return soloLetras(event)" type="text" name="ap_materno" class="form-control" required id="id_ap_materno">
+                </div><br> -->
+                <div class="col">
+                    <label for="id_nombres">Nombres:</label>
+                    <input onkeypress="return soloLetras(event)"  type="text" name="nombres"  class="form-control" required id="id_nombres">
+                </div><br>
+            </div>    
+            <div class="row">
+                <!-- <div class="col">
+                    <label for="id_direccion">Direccion:</label>
+                    <input type="text" name="direccion"  class="form-control" required id="id_direccion">
+                </div> -->
+                <div class="col">
+                    <label for="id_id_pais">Pais:</label>
+                    <select  name="id_pais" class="form-control" required id="id_id_pais">
+                        {% for g in pais %}
+                            <option id="id_id_pais" value="{{ g.id_pais }}">{{ g.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- <div class="col">
+                    <label for="id_fono">Celular:</label>
+                    <input type="text" name="fono" class="form-control" required id="id_fono">
+                </div> -->
+                <div class="col">
+                    <label for="id_email">Email:</label>
+                    <input type="email" name="email" class="form-control" required id="id_email">
+                </div>
+                <div class="col">
+                    <label for="id_id_rol">Rol:</label>
+                    <select  name="id_rol" class="form-control" required id="id_id_rol">
+                        {% for g in rol %}
+                            <option id="id_id_rol" value="{{ g.id_rol }}">{{ g.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>    
+            </div>    
+            <div class="row">
+                    <div class="col">
+                        <label for="id_username">Nombre de usuario:</label>
+                        <input type="text" name="username" class="form-control" maxlength="150" autofocus required id="id_username">
+                    </div>
+                    <div class="col">
+                        <label for="id_contrasena">Contraseña:</label>
+                        <input type="password" name="contrasena" class="form-control" required id="id_contrasena">
+                    </div>   
+                <div class="col">
+                    <button type="submit" style="margin-top: 30px;" class="btn btn-primary">Registrar</button>
+                </div>
+            </div>    
+            </form>
+        </section>  
+             
+				<section>
+                {% block js %}
+                    <script>
+                        function eliminarUsuario(username){
+                            Swal.fire({
+                                "title": "¿Estás Seguro?",
+                                "text": "Esta acción sera permanente",
+                                "icon": "question",
+                                "showCancelButton":true,
+                                "cancelButtonText":"No, Cancelar",
+                                "confirmButtonText":"Si, Eliminar",
+                                "confirmButtonColor":"#dc3545",
+                                "reverseButtons":true
+                            })
+                            .then(function(result){
+                                if (result.isConfirmed){
+                                    window.location.href="/delete/user/"+username+"/"
+                                }
+                            })                          
+                        }
+                    </script>
+                {% endblock %}
+
+                    <h2>Usuarios</h2>
+                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Filtrar...">
+                     
+                    
+
+                    <table id="myTable"class="table table-resposive-lg table table-striped table-hover">
+                        <!-- <thead class="thead-light"> -->
+                            <tr>
+                                
+                                <th>NOMBRE</th>
+                                <th>APELLIDO</th>
+                                <th>CORREO</th>
+                                <th>USUARIO</th>
+                                <th>ROL</th>
+                                <th>ACCION</th>
+                            </tr>
+                            
+                        <!-- </thead>  -->
+                        
+                        {% for a in usuario %}
+                        
+                            <tr>
+                                
+                                <td>{{a.nombres}}</td>
+                                <td>{{a.ap_paterno}}</td>	
+                                <td>{{a.email}}</td>
+                                <td>{{a.username}}</td>
+                                <td>{{a.id_rol}}</td>
+                                
+                                 <td>
+                                    <a href="{% url 'modify_user' a.username %}"> <button type="button" class="btn btn-outline-primary">Editar</button> </a>
+                                    <a href="{% url 'delete_user' a.username %}"> <button type="button" class="btn btn-outline-danger">Eliminar</button> </a>
+                                    <!-- <a href="#" onclick="eliminarUsuario({{ a.username }})" class="btn btn-outline-danger"> Eliminar </a> -->
+                                </td>
+                            </tr> 
+                        {% endfor %}
+                            						
+                    </table>
+                    <!-- {% if messages %}
+                    {% for m in messages %}
+                    <div>{{m}}</div>
+                    {% endfor %}
+                    {% endif %} -->
+                </section>	      
+                             
+    </div>
+
+    {% endblock content %}
+</body>
+
+</html>
+
+<script>
+
+
+
+$(function(){
+	var $tabla = $('#tabla');
+	
+	$('#selectCategory').change(function(){
+		var value = $(this).val();
+		if (value){
+			$('tbody tr.' + value, $tabla).show();
+			$('tbody tr:not(.' + value + ')', $tabla).hide();
+		}
+		else{
+			// Se ha seleccionado All
+			$('tbody tr', $tabla).show();
+		}
+	});
+});
+
+</script>

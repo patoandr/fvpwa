@@ -1,0 +1,552 @@
+{% load static %}
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Feria Virtual</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+  <!-- <link href="{% static 'css/fondo.css' %}" rel="stylesheet"> -->
+
+  <!-- Custom Fonts -->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %} " rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet">
+
+  <!--Color de la Aplicacion PWA-->
+  <meta name="theme-color" content="" />
+
+  <!--Optimizacion para movil-->
+  <meta name="MobileOptimized" content="width" />
+  <meta name="HandheldFriendly" content="true" />
+
+  <!--Meta etiquetas PWA para Apple-->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!--Configuracion general de la PWA-->
+  <link rel="manifest" href="manifest.json" />
+
+
+
+  <!-- Custom CSS -->
+  <link href="{% static 'css/stylish-portfolio.min.css' %}" rel="stylesheet">
+
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!--Scripts-->
+  <script src="main.js"></script>
+
+
+</head>
+<body id="page-top">
+
+  <!-- Navigation -->
+  <a class="menu-toggle rounded" href="#">
+    <i class="fas fa-bars"></i>
+  </a>
+  <nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a class="js-scroll-trigger" href="#">Menú de opciones</a>
+      </li>      
+      <li class="sidebar-brand">
+        <a class="js-scroll-trigger" href="{% url 'index' %}">Ir a inicio</a>
+      </li> 
+      {% if user.is_authenticated %}
+
+      <!-- Rol Administrador -->
+      {% for groups in request.user.groups.values_list %}
+      {% for group in groups %}
+      {% if group == 'Administrador'%} 
+      <div class="d-flex justify-content-center h-100">
+        <div class="image_outer_container">
+          <div class="green_icon"></div>
+          <div class="image_inner_container">
+            <img src="{% static 'img/tua.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Bienvenid@ {{ user.username}}</h4>       
+      </div>   
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Rol: Administrador</h4>       
+      </div>   
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'menu' %}">Gestion de modulos</a>
+      </li>      
+      <!-- <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'usuarios' %}">Crear usuario</a>
+      </li>      -->
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="http://127.0.0.1:8000/admin/">Panel de administrador</a>
+      </li> 
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'logout' %}">Cerrar sesión</a>
+      </li> 
+      {%endif%}
+      {% endfor %}
+      {% endfor %}  
+      
+      <!-- Rol Proveedor -->
+      {% for groups in request.user.groups.values_list %}
+      {% for group in groups %}
+      {% if group == 'Proveedor'%} 
+      <div class="d-flex justify-content-center h-100">
+        <div class="image_outer_container">
+          <div class="green_icon"></div>
+          <div class="image_inner_container">
+            <img src="{% static 'img/ta.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Bienvenid@ {{ user.username}}</h4>       
+      </div>   
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Rol: Proveedor</h4>       
+      </div>   
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'menu' %}">Gestion de modulos</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Ver procesos de venta</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">¿Quienes somos?</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contacto</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'logout' %}">Cerrar sesión</a>
+      </li> 
+      {%endif%}
+      {% endfor %}
+      {% endfor %}  
+      
+      <!-- Rol Cliente externo -->
+      {% for groups in request.user.groups.values_list %}
+      {% for group in groups %}
+      {% if group == 'Cliente Externo'%} 
+      <div class="d-flex justify-content-center h-100">
+        <div class="image_outer_container">
+          <div class="green_icon"></div>
+          <div class="image_inner_container">
+            <img src="{% static 'img/ti.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Bienvenid@ {{ user.username}}</h4>       
+      </div>   
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Rol: Cliente Externo</h4>       
+      </div>   
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'menu' %}">Gestion de modulos</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Crear solicitud</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Historial de solicitudes</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">¿Quienes somos?</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contacto</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'logout' %}">Cerrar sesión</a>
+      </li>
+
+      {%endif%}
+      {% endfor %}
+      {% endfor %}
+
+      <!-- Rol Cliente interno -->
+      {% for groups in request.user.groups.values_list %}
+      {% for group in groups %}
+      {% if group == 'Cliente Interno'%} 
+      <div class="d-flex justify-content-center h-100">
+        <div class="image_outer_container">
+          <div class="green_icon"></div>
+          <div class="image_inner_container">
+            <img src="{% static 'img/to.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Bienvenid@ {{ user.username}}</h4>       
+      </div>   
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Rol: Cliente Interno</h4>       
+      </div>   
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'menu' %}">Gestion de modulos</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Ver procesos de venta</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">¿Quienes somos?</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contacto</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'logout' %}">Cerrar sesión</a>
+      </li>
+      
+      {%endif%}
+      {% endfor %}
+      {% endfor %}
+
+      <!-- Rol Transportista -->
+      {% for groups in request.user.groups.values_list %}
+      {% for group in groups %}
+      {% if group == 'Transportista'%} 
+      <div class="d-flex justify-content-center h-100">
+        <div class="image_outer_container">
+          <div class="green_icon"></div>
+          <div class="image_inner_container">
+            <img src="{% static 'img/tu.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Bienvenid@ {{ user.username}}</h4>       
+      </div>   
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Rol: Transportista</h4>       
+      </div>   
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'menu' %}">Gestion de modulos</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Ver procesos de venta</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">¿Quienes somos?</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contacto</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'logout' %}">Cerrar sesión</a>
+      </li>
+      
+      {%endif%}
+      {% endfor %}
+      {% endfor %}
+
+      <!-- Rol Consultor -->
+      {% for groups in request.user.groups.values_list %}
+      {% for group in groups %}
+      {% if group == 'Consultor'%} 
+      <div class="d-flex justify-content-center h-100">
+        <div class="image_outer_container">
+          <div class="green_icon"></div>
+          <div class="image_inner_container">
+            <img src="{% static 'img/te.jpg' %}">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Bienvenid@ {{ user.username}}</h4>       
+      </div>   
+      <div class="d-flex justify-content-center h-100">
+        <div class="nombre_user"></div>
+       <h4>Rol: Consultor</h4>       
+      </div>   
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'menu' %}">Gestion de modulos</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Reportes</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">¿Quienes somos?</a>
+      </li>      
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contacto</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'logout' %}">Cerrar sesión</a>
+      </li>
+      
+      {%endif%}
+      {% endfor %}
+      {% endfor %}
+  
+      {% else %}      
+     
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{% url 'login' %}">Iniciar sesión</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#about">Enviar solicitud de registro</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">¿Quienes somos?</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contacto</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% block content %}
+  <!-- Header -->
+  <header class="masthead d-flex">
+    <div class="container text-center my-auto">
+      <h1 class="mb-1">FERIA VIRTUAL</h1>
+      <h3 class="mb-5">
+        <em>¡Frutas y verduras de primera calidad!</em>
+      </h3>
+      <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Ver más</a>
+    </div>
+    <div class="overlay"></div>
+  </header>
+
+ 
+
+  <!-- About -->
+{% if not user.is_authenticated %}
+<section class="content-section bg-light" id="about">
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h2>Inicia sesión con tú cuenta Feria Virtual para acceder a nuestros servicios</h2>
+        
+        <a class="btn btn-dark btn-xl js-scroll-trigger" href="{% url 'login' %}">INICIAR SESIÓN</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <h6>o crea una nueva cuenta!</h6>          
+        <a class="btn btn-dark btn-xl js-scroll-trigger" href="{% url 'registrar_usuarios' %}">REGITRATE AQUI</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+  
+
+  {% if not user.is_authenticated %}
+  <!-- Callout -->
+  <section class="callout">
+    <div class="container text-center">
+      <h2 class="mx-auto mb-5">¡Bienvenido
+        <em>a</em>
+        Feria Virtual!</h2>
+      <a class="btn btn-primary btn-xl" href="{% url 'login' %}">Comenzar ya!</a>
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- Portfolio -->
+  <section class="content-section" id="portfolio">
+    <div class="container">
+      <div class="content-section-heading text-center">
+        <h3 class="text-secondary mb-0">Zona clientes</h3>
+        <h2 class="mb-5">Ofertas recientes</h2>
+      </div>
+      <div class="row no-gutters">
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="#!">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">Productos</div>
+                <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-1.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="#!">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">Saldos</div>
+                <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-2.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="#!">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">Transportes</div>
+                <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-3.jpg' %}" alt="">
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="#!">
+            <div class="caption">
+              <div class="caption-content">
+                <div class="h2">Proveedores</div>
+                <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
+              </div>
+            </div>
+            <img class="img-fluid" src="{% static 'img/portfolio-4.jpg' %}" alt="">
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+  </section>  
+
+
+  <!-- Map -->
+  <div id="contact" class="map">
+    <iframe src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
+    <br />
+    <small>
+      <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
+    </small>
+  </div>
+
+  <!-- Services -->
+<section class="content-section bg-primary text-white text-center" id="services">
+  <div class="container">
+    <div class="content-section-heading">
+      <h3 class="text-secondary mb-0">RR.SS</h3>
+      <h2 class="mb-5">Buscanos en nuestras redes sociales</h2>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-social-facebook"></i>
+        </span>
+        <h4>
+          <strong>Facebook</strong>
+        </h4>
+        <p class="text-faded mb-0">Looks great on any screen size!</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-social-twitter"></i>
+        </span>
+        <h4>
+          <strong>Twitter</strong>
+        </h4>
+        <p class="text-faded mb-0">Freshly redesigned for Bootstrap 4.</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-social-youtube"></i>
+        </span>
+        <h4>
+          <strong>Youtube</strong>
+        </h4>
+        <p class="text-faded mb-0">Millions of users
+          <i class="fas fa-heart"></i>
+          Start Bootstrap!</p>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <span class="service-icon rounded-circle mx-auto mb-3">
+          <i class="icon-screen-tablet"></i>
+        </span>
+        <h4>
+          <strong>Instagram</strong>
+        </h4>
+        <p class="text-faded mb-0">I mustache you a question...</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+  {% endblock %}
+
+  <!-- Footer -->
+  <footer class="footer text-center">
+    <div class="container">
+      <ul class="list-inline mb-5">
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white mr-3" href="#!">
+            <i class="icon-call-in"></i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white mr-3" href="#!">
+            <i class="icon-bubbles"></i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white" href="#!">
+            <i class="icon-share"></i>
+          </a>
+        </li>
+      </ul>
+      <p class="text-muted small mb-0">Copyright &copy; Feria Virtual 2020</p>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="{% static 'js/stylish-portfolio.min.js' %}"></script>
+
+  <!-- Funciones -->
+  <script src="{% static 'js/funciones.js' %}"></script>
+
+  <!-- Sweetalert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  {% if messages %}
+    {% for m in messages %}
+      <script>
+        Swal.fire({
+          "title": "Notificación!!",
+          "text": "{{m}}",
+          "icon":'info'
+        })
+      </script>
+    {% endfor %}
+  {% endif %}
+
+
+</body>
+
+</html>

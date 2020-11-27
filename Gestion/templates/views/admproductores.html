@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Feria Virtual</title>        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"   >
+
+        <link href="{% static 'css/esadmin.css' %}" rel="stylesheet">
+ 
+    </head>
+    <body>
+      
+        <div class="contenedor">
+            <div class ='generalcliente'>
+                <div class ='lineaverde'>  
+                
+                </div>
+                <div class ='linita'>
+                    <br>  <br>
+                    <br>  <br>
+                    <img class="centrado" src="imagenes/logo.jpg" width="60" height="40" align="LEFT"> <H3>FERIA VIRTUAL</H3>
+                    <br>  <br>
+                     <H3>INICIO</H3>
+                     _________________
+                    <br>
+                    <h5><a href="">Mantenedores</a>
+                    <br>
+                    <a href="Admproductores.html">Proveedores</a>
+                    <br> 
+                    <a href="Admclienteexterno.html">Clientes externos</a>
+                    <br> 
+                    <a href="admclienteinterno.html">Clientes internos</a>
+                    <br> 
+                    <a href="admcontratos.html">Contratos</a>
+                    <br>  <br>
+                    <a href="">Procesos de venta</a>
+                    <br>  <br>
+                    <a href="">Subasta de transporte</a>
+                    <br>  <br>
+                    <a href="">Cartera</a>
+                    <br>
+                    _________________
+                    <br>  <br>
+                    <a href="">Ayuda</a>
+                    <br>  <br>
+                    <a href="">¿quienes somos?</a>
+                    <br>  <br>
+                    <a href="">Buscanos en nuestras redes sociales</a>
+                    <div class ="socialess">
+                        <a class="icon-facebook-official" href="#"></a>
+                        <a class="icon-twitter" href="#"></a>
+                        <a class="icon-instagram" href="#"></a>
+                    </div> </h5>      
+                </div>
+
+                <div class='listap'>
+                    <DIV CLASS="container_tableproductor">
+                        <div class="table_titleproductor">LISTADO DE PROVEEDORES</div>
+                        
+                        <div class="table_headerproductor">Id</div>
+                        <div class="table_headerproductor">Rut</div>
+                        <div class="table_headerproductor">A.Paterno</div> 
+                        <div class="table_headerproductor">A.Materno</div> 
+                        <div class="table_headerproductor">Nombre</div> 
+                        <div class="table_headerproductor">Direccion</div> 
+                        <div class="table_headerproductor">Telefono</div> 
+                        <div class="table_headerproductor">Correo</div> 
+
+                        {% for p in proveedores %}
+                        <div class="table_itemproductor">{{p.0}}</div>
+                        <div class="table_itemproductor">{{p.1}}</div>
+                        <div class="table_itemproductor">{{p.2}}</div>
+                        <div class="table_itemproductor">{{p.3}}</div>
+                        <div class="table_itemproductor">{{p.4}}</div>
+                        <div class="table_itemproductor">{{p.5}}</div>
+                        <div class="table_itemproductor">{{p.6}}</div>
+                        <div class="table_itemproductor">{{p.7}}</div>
+                        {% endfor%}
+
+                     </DIV> 
+                </div>
+                
+            </div>
+        </div>
+     
+    </body>
+</html>

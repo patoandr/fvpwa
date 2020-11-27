@@ -1,0 +1,6 @@
+body {
+  background:#000;
+  background:url("../img/pixel-heart.png");
+  background-repeat: repeat;
+  background-attachment: scroll;
+}
