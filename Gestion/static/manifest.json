@@ -6,8 +6,8 @@
     "theme_color": "",
     "orientation": "portrait",
     "display": "standalone",
-    "start_url": "./Gestion/templates/index.html?utm_source=web_app_manifest",
-    "scope": "./",
+    "start_url": "./index.html?utm_source=web_app_manifest",
+    "scope": "./Gestion/templates",
     "lang": "es-mx"
 
 }
