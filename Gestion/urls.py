@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 # ,quienessomos, afterlogin       
 
 urlpatterns = [
-    path('', index, name="index"),
+    path('Gestion/templates/index', index, name="index"),
     path('login/', auth_views.LoginView.as_view(), name='login'),    
     path('login/menu/', menu, name="menu"),
     path('menu/', menu, name="menu"),
