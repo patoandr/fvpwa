@@ -7,7 +7,7 @@
     "orientation": "portrait",
     "display": "standalone",
     "start_url": "../Gestion/templates/index.html?utm_source=web_app_manifest",
-    "scope": "./",
+    "scope": "../Gestion/templates/index.html",
     "lang": "es-mx"
 
 }
