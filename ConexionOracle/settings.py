@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
     'ENGINE':   'django.db.backends.oracle',
     #'NAME':     '192.168.1.137:1521/xe',
-    'NAME':     'localhost:1521/xe',
+    'NAME':     'dbferiavirtual.cycnjgvycm6a.us-east-1.rds.amazonaws.com:1521/ORCL',
     'USER':     config('BD_NAME'),
     'PASSWORD': config('BD_PASSWORD'),
   }
