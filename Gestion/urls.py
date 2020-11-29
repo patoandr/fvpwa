@@ -18,9 +18,20 @@ urlpatterns = [
     path('registrar_usuarios/', registrar_usuarios, name="registrar_usuarios"),
     path('view_admin/', vista_admin, name="vista_admin"),
     path('view_nuevo_pedido/', nuevo_pedido, name="nuevo_pedido"),
-    path('view_ing_producto/', ing_producto, name="ingProductos"),
+    path('ingresar/productos/<username>/', ingProductos, name="ingProductos"),
     path('contratos/', crearContrato, name="contratos"),
-    #path('/index}', menu, name="menu"),
+    path('contratos/eliminar/<id_contrato>', eliminarContratos, name="eliminarContratos"),
+    path('contratos/modificar/<id_contrato>', modificarContratos, name="modificarContratos"),
+    path('saldos/', publicarSaldos, name="saldos"),
+    path('salditos/delete/<id_saldos>/', delete_saldos, name="delete_saldos"),
+    path('salditos/modificar/<id_saldos>/', modify_saldos, name="modify_saldos"),
+    path('menu/modificarDetalle/<id_pedido>', modificarPedido, name="modificarPedido"),
+    path('nuevo_pedido/interno/<username>', nuevo_pedido_interno, name="nuevo_pedido_interno"),
+    path('nuevo_pedido/interno/pedido_interno/<id_saldos>', comprarSaldoFruta, name="comprarSaldoFruta"),
+    path('pagos/', pagos, name="pagos"),
+    path('listar/pedidos/', listarPedido, name="listarPedido"),
+    path('listar/pedidos/interno/', listarPedidoInterno, name="listarPedidoInterno"),
+    path('listar/pedidos/externo/', listarPedidoExterno, name="listarPedidoExterno"),
 
 
 #########panxo listado proveedores
@@ -28,6 +39,7 @@ urlpatterns = [
     path('usuarios/', listado_user, name="listado_user"),
     path('rproveedor/', rproveedor, name="rproveedor"),
     path('rcliente/', rcliente, name="rcliente"),
+    path('solicitud/', solicitud, name="solicitud"),
 
 
      path('feriacarro/', feriacarro, name="feriacarro"), 
@@ -39,4 +51,5 @@ urlpatterns = [
     path('stockexternos/', stockexternos, name="stockexternos"),
     path('comprando/', comprando, name="comprando"), 
     path('rcompra/', ingPedido, name="rcompra"),
+    path('rcompra_detalle/', rcompra_detalle, name="rcompra_detalle"),
 ]

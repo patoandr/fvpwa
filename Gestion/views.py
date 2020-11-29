@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -6,9 +6,12 @@ from Gestion.forms import *
 from Gestion.models import  *
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.conf import settings
 import os
 from django.http import HttpResponse
+from django.contrib.auth.hashers import make_password
+
 
 #########panxo
 from django.db import connection
@@ -23,7 +26,21 @@ def login(request):
 
 @login_required
 def menu(request):
-    return render(request,'menu.html')
+    listarPedido = Pedido.objects.all()
+    listarPedido = Pedido.objects.filter(estado_pedido = 1)
+    page = request.GET.get('page', 1)
+
+    try:
+        paginator = Paginator(listarPedido,5)
+        listarPedido = paginator.page(page)
+    except:
+        raise Http404
+    variables={
+        'entity' : listarPedido,
+        'paginator': paginator
+    }
+
+    return render(request,'menu.html', variables )
 
 ####################   INICIO  CRUD USUARIO ####################
 @login_required
@@ -38,6 +55,8 @@ def ingUsuario(request):
         form = formUsuario(request.POST)
         print('Entro aqui')
         if form.is_valid():
+            instance = form.save(commit=False)
+            instance.contrasena = make_password(request.POST.get('contrasena'))
             nombre = request.POST.get('username')
             email = request.POST.get('email')
             passw = request.POST.get('contrasena')
@@ -47,7 +66,7 @@ def ingUsuario(request):
             g = Group.objects.get(name=value)
             g.user_set.add(User.objects.last())
             print("1")
-            form.save()  
+            instance.save()  
             messages.success(request,"Usuario Creado Correctamente")
         else:
            messages.error(request,"No se ha podido crear usuario, Favor revisar datos")        
@@ -99,6 +118,7 @@ def delete_user(request, username):
     messages.success(request,"Eliminado Correctamente")
     return redirect ('usuarios')
 
+
 def modify_user(request,username):
     #buscar el usuario para luego modificar
     users = Usuario.objects.get(username=username)
@@ -126,8 +146,13 @@ def modify_user(request,username):
         #users.id_rol = request.POST.get('id_rol')
         users.username = request.POST.get('username')
         usersDJ.username = request.POST.get('username')
-        users.contrasena = request.POST.get('contrasena')
-        usersDJ.password = request.POST.get('contrasena')
+        users.contrasena = make_password(request.POST.get('contrasena'))
+
+        u = User.objects.get(username=users.username)
+        ncontra = request.POST.get('contrasena')
+        u.set_password(ncontra)
+        
+
         # value = request.POST.get('group')
         # value = request.POST.get('pais')
         # p = Pais.objects.get(name=value)
@@ -141,6 +166,7 @@ def modify_user(request,username):
         try:
             usersDJ.save()
             users.save()
+            u.save()
             messages.success(request, 'Datos modificados correctamente')
         
         except:
@@ -207,13 +233,15 @@ def listado_proveedores():
         lista.append(fila)
     return lista
 
-def ing_producto(request):
+@login_required
+def ingProductos(request, username):
+    print("Este es el usuario: "+username)
     form = formProd()
-    proveedor = Usuario.objects.filter(id_rol=6)
+    proveedor = Usuario.objects.get(username=username)
     nombre = Nombre.objects.all()
-    producto = Producto.objects.all()
+    print(proveedor.id_usuario)
+    producto = Producto.objects.filter(id_usuario=proveedor.id_usuario)
     calidad = Calidad.objects.all()
-    print(form)
     if request.method == 'POST':
         print("se genera el post")
         form = formProd(request.POST)
@@ -315,92 +343,12 @@ def agregar_proveedor(idproveedor,rut,appaterno,apmaterno,nombres,direccion,tele
     return salida.getvalue()
 
 
-##### CLIENTES AGREGAR 
-
-
-##listar PAIS  y registrar CLIENTES
-def rcliente(request):
-    data = {
-        'mostrarr':listado_pais(),
-        'verid':listado_idc(),
-        'mostrarrol':listado_rol()
-    }
-
-    if request.method == 'POST':
-        idcliente = request.POST.get('idcliente')
-        rut = request.POST.get('rut')
-        appaterno = request.POST.get('appaterno')
-        apmaterno = request.POST.get('apmaterno')
-        nombres = request.POST.get('nombres')
-        direccion = request.POST.get('direccion')
-        pais = request.POST.get('pais')
-        telefono = request.POST.get('telefono')
-        correo = request.POST.get('correo')
-        id_rol = request.POST.get('id_rol')
-        salida = agregar_cliente(idcliente,rut,appaterno,apmaterno,nombres,direccion,pais,telefono,correo,id_rol)
-
-        if salida == 1:
-            data ['mensaje'] = 'Agregado correctamente'
-        else:
-            data ['mensaje'] = 'No se ha podido guadar'
-
-    return render(request, 'rcliente.html',data)
-
-
-##agregar cliente
-def agregar_cliente(idcliente,rut,appaterno,apmaterno,nombres,direccion,pais,telefono,correo,id_rol):
-    djang_cursor = connection.cursor()
-    cursor = djang_cursor.connection.cursor()
-    salida =cursor.var(cx_Oracle.NUMBER)
-    cursor.callproc('SP_AGREGAR_CLIENTE', [idcliente,rut,appaterno,apmaterno,nombres,direccion,pais,telefono,correo,id_rol, salida])
-    return salida.getvalue()
-
-
-##Listado de los roles.
-def listado_rol():
-    djang_cursor = connection.cursor()
-    cursor = djang_cursor.connection.cursor()
-    out_cur = djang_cursor.connection.cursor()
-
-    cursor.callproc("SP_LISTAR_ROLES",  [out_cur])
-
-    lista = []
-    for fila in out_cur:
-        lista.append(fila)
-    return lista
-
-    ##el mas grande de los clintes+1
-def listado_idc():
-    djang_cursor = connection.cursor()
-    cursor = djang_cursor.connection.cursor()
-    out_cur = djang_cursor.connection.cursor()
-
-    cursor.callproc("SP_ID_CLIENTE",  [out_cur])
-
-    lista = []
-    for fila in out_cur:
-        lista.append(fila)
-    return lista
-
-
-## mostrar paises
-def listado_pais():
-    djang_cursor = connection.cursor()
-    cursor = djang_cursor.connection.cursor()
-    out_cur = djang_cursor.connection.cursor()
-
-    cursor.callproc("SP_LISTAR_PAISES",  [out_cur])
-
-    lista = []
-    for fila in out_cur:
-        lista.append(fila)
-    return lista
 
 
 ##########VISTA de contratos
 def crearContrato(request):
     form = formcontrato()
-    proveedor = Usuario.objects.filter(id_rol=5)
+    proveedor = Usuario.objects.filter(id_rol=2)
     contratos = Contratos.objects.all()
     print(form)
     if request.method == 'POST':
@@ -411,13 +359,47 @@ def crearContrato(request):
             print("1")
             form.save()
 
-    return render (request, 'contratos.html',{'form':form,'proveedor':proveedor,'contratos':contratos})
+    return render (request, 'contratos.html',{'form':form,'proveedor':proveedor, 'contratos':contratos})
+
+def modificarContratos(request,id_contrato):
+    #buscar el contrato para luego modificar
+    contrato = Contratos.objects.get(id_contrato=id_contrato)
+    proveedor = Usuario.objects.filter(id_rol=2)
+    
+    variables = {
+        # 'form': formcontrato(instance=contrato),
+        'contrato':contrato,
+        'proveedor':proveedor,
+    }
+    if request.POST:
+        # contrato.id_contrato = request.POST.get('id_contrato')
+        contrato.fecha_inicio = request.POST.get('fecha_inicio')
+        contrato.fecha_termino = request.POST.get('fecha_termino')
+
+        try:
+            contrato.save()
+            messages.success(request, 'Datos actualizados correctamente')
+            return redirect('contratos')
+        
+        except:
+            messages.error(request, 'No se ha podido actualizar ')
+
+        return redirect('contratos')
+        
+    return render(request, 'contratos_modificar.html',variables)
+
+@login_required
+def eliminarContratos(request, id_contrato):
+    contratos=Contratos.objects.get(id_contrato=id_contrato) 
+    contratos.delete()
+    messages.success(request,"Eliminado Correctamente")
+    return redirect ('contratos')
 
 ########### CRUD TRANSPORTISTA ##################
 
 def transportista(request):
     form = formcamion()
-    usuario = Usuario.objects.filter(id_rol=5)
+    usuario = Usuario.objects.filter(id_rol=6)
     camion = Camion.objects.all()
     print(form)
     if request.method == 'POST':
@@ -429,17 +411,18 @@ def transportista(request):
             print("1")
             form.save()
             messages.success(request, 'camion ingresado correctamente')
-
-        #return redirect('ingProductos')
-
+        else:
+           messages.error(request,"No se ha podido ingresar camión, Favor revisar datos")
 
     return render (request, 'views/view_transportista.html',{'form':form,'usuario':usuario,'camion':camion})
 
 def ingPedido(request):
     form = formPedido()
-    usuario = Usuario.objects.filter(id_rol=3)
+    usuario = Usuario.objects.filter(id_rol=4)
     camion = Camion.objects.all()
     pais = Pais.objects.all()
+    # pedido = Pedido.objects.get(id_pedido=id_pedido)
+    # pedido = Pedido.objects.all()
     print(form)
     if request.method == 'POST':
         print("se genera el post")
@@ -450,19 +433,38 @@ def ingPedido(request):
             print("1")
             form.save()
             messages.success(request, 'Pedido ingresado correctamente')
+            return redirect('rcompra_detalle')
+        else:
+           messages.error(request,"No se ha podido ingresar pedido, Favor revisar datos")  
 
         #return redirect('ingProductos')
 
-
     return render (request, 'rcompra.html',{'form':form,'usuario':usuario,'camion':camion,'pais':pais})    
 
+def rcompra_detalle(request):
+    form = formrcompra_detalle()
+    detalle_pedido = DetallePedido.objects.all()
+    producto = Producto.objects.all()
+    pedido = Pedido.objects.all()
+    print(form)
+    if request.method == 'POST':
+        print("se genera el post")
+        form = formrcompra_detalle(request.POST)
+        print("Entro Aqui")
+        if form.is_valid():
+            print("1")
+            form.save()
+            messages.success(request, 'Detalle ingresado correctamente')
+        else:
+           messages.error(request,"No se ha podido ingresar el detalle de tu compra, Favor revisar datos")              
+    return render (request, 'rcompra_detalle.html',{'form':form, 'detalle_pedido':detalle_pedido, 'producto':producto, 'pedido':pedido})
 
 ##envio de correo solicitud de compra
 def feriacarro(request):
     usuario = Usuario.objects.all()
     if request.method =="POST":   
        subject = request.POST["cliente"]
-       message = request.POST["pedido"] + " solicitado para el correo " + request.POST["correo"] + " del id Usuario Nº " + request.POST["idusuario"] 
+       message = request.POST["pedido"] + " solicitado para el correo " + request.POST["correo"]
        email_from = settings.EMAIL_HOST_USER
        recipient_list=["virtual.feriavirtual2020@gmail.com"]
        send_mail(subject, message, email_from, recipient_list)
@@ -526,16 +528,285 @@ def agregar_pedidoex(Id_usuario,fpedido,ndestinatario,pais,ciudad,direccion,tele
     cursor.callproc('SP_AGREGAR_PEDIDOEX', [Id_usuario,fpedido,ndestinatario,pais,ciudad,direccion,telefono,camionero,epedido,salida])
     return salida.getvalue()
 
+
+@login_required
+def publicarSaldos(request):
+    form = formSaldos()
+    saldos = Saldos.objects.all()
+    frutas = Nombre.objects.all()
+    print(form)
+    if request.method == 'POST':
+        print('Se genera el post')
+        form = formSaldos(request.POST)
+        print('Entro aqui')
+        if form.is_valid():
+            print("1")
+            form.save()
+
+    return render (request, 'saldos.html',{'form':form,'saldos':saldos, 'frutas':frutas})
+
+@login_required
+def delete_saldos(request, id_saldos):
+    saldos=Saldos.objects.get(id_saldos=id_saldos)   
+    saldos.delete()
+    messages.success(request,"Eliminado Correctamente")
+    return redirect ('saldos')
+
+def modify_saldos(request,id_saldos):
+    #buscar el saldo para luego modificar
+    saldo = Saldos.objects.get(id_saldos=id_saldos)   
+    variables = {
+        'saldo':saldo,
+    }
+    if request.POST:
+        saldo.montos_saldos = request.POST.get('montos_saldos') 
+        # saldo.fecha_publicacion = request.POST.get('fecha_publicacion')
+
+        try:
+            saldo.save()            
+            messages.success(request, 'Montos Actualizados correctamente')
+        
+        except:
+            messages.error(request, 'No se ha podido modificar ')
+
+        return redirect('saldos')   
+    return render(request, 'saldos_modificar.html',variables)
+
+def modificarPedido(request,id_pedido):
+    listarPedido = Pedido.objects.get(id_pedido=id_pedido)
+    estado = Estados.objects.all()
+    variables = {
+        'lp': listarPedido,
+        'estado': estado,
+    }
+    if request.POST:
+        listarPedido.fono_destinatario = request.POST.get('fono_destinatario')
+        listarPedido.ciudad_destinatario = request.POST.get('ciudad_destinatario')
+        listarPedido.direccion_destinatario = request.POST.get('direccion_destinatario')
+        #listarPedido.fecha_pedido = request.POST.get('fecha_pedido')
+        listarPedido.fecha_envio = request.POST.get('fecha_envio')
+        listarPedido.fecha_entrega = request.POST.get('fecha_entrega')
+        #var = listarPedido.estado_pedido = request.POST.get('estado_pedido')
+        var = request.POST.get('estado_pedido')
+        #print(var)
+        listarPedido.estado_pedido = Estados.objects.get(estado_pedido=var)
+        try:
+            listarPedido.save()
+            messages.success(request, 'Datos actualizados correctamente')
+        except:
+            messages.error(request, 'No se ha podido actualizar ')
+        return redirect('menu')
+    return  render(request, 'pedido_modificar.html', variables)
+
+def nuevo_pedido_interno(request,username):
+    #__lte es mejor que y __gte es mayor que!!!!
+    saldo = Saldos.objects.filter(montos_saldos__lte = 10000)
+    form = formPedido()
+    print(username)
+
+    cliente = Usuario.objects.get(username=username)
+    camion = Camion.objects.all()
+    pais = Pais.objects.all()
+    variables = {
+        'saldo':saldo,
+        'cliente':cliente,
+        'camion': camion,
+        'pais':pais,
+        'fomr':form
+    }
+    print(form)
+    if request.method == 'POST':
+        print("se genera el post")
+        form = formPedido(request.POST)
+        print("Entro aqui")
+        # print(form)
+        if form.is_valid():
+            print("1")
+            form.save()
+
+            messages.success(request, 'Pedido ingresado correctamente')            
+        else:
+           messages.error(request,"No se ha podido ingresar pedido, Favor revisar datos")   
+        
+    return  render(request, 'listar_pedido_interno.html', variables)
+
+
+def comprarSaldoFruta(request, id_saldos):
+    form = formsaldo_detalle()
+    saldosDetalle = SaldosDetalle.objects.all()
+    saldoAll = Saldos.objects.get(id_saldos=id_saldos)
+    saldo = Saldos.objects.all()
+    pedido = Pedido.objects.last()
+    primero = request.POST.get('stock_fruta')#montos saldo
+    segundo = request.POST.get('cantidad')
+    tercero = request.POST.get('precio_fruta')#precio de la fruta
+    # segundo2 = request.POST.get('cantidad')
+    print(form)
+    if request.method == 'POST':
+        print("se genera el post")
+        form = formsaldo_detalle(request.POST)
+        print("Entro Aqui")
+        if form.is_valid():
+            print("1")
+            resultado = (int(primero) - int(segundo))
+            precio_total = (int(segundo) * int(tercero))
+            saldoAll.montos_saldos = resultado
+            saldosDetalle.total = precio_total
+            form.save()
+            saldoAll.save()
+            messages.success(request, 'Detalle ingresado correctamente')
+        else:
+           messages.error(request,"No se ha podido ingresar el detalle de tu compra, Favor revisar datos")              
+    return render (request, 'agregar_pedido_interno.html',{'form':form, 'saldo':saldo, 'saldoAll':saldoAll,'pedido':pedido,'saldosDetalle':saldosDetalle})
+
+def pagos(request):
+     return render(request, 'pagos.html', {})
+
+def listarPedido(request):    
+    usuario = Usuario.objects.filter(id_rol=3)
     
-# def listado_frutas():
-#     djang_cursor = connection.cursor()
-#     cursor = djang_cursor.connection.cursor()
-#     out_cur = djang_cursor.connection.cursor()
+    
+    listarPedido = Pedido.objects.all()
+        #meter el usuario que esta solicitando
+    page = request.GET.get('page', 1)
 
-#     cursor.callproc("SP_LISTAR_FRUTAS",  [out_cur])
+    try:
+        paginator = Paginator(listarPedido,5)
+        listarPedido = paginator.page(page)
+    except:
+        raise Http404
+    variables={
+        'entity' : listarPedido,
+        'paginator': paginator,
+        'usuario':usuario
+    }
 
-#     lista = []
-#     for fila in out_cur:
-#         lista.append(fila)
-#     return lista
-##Ver Stock Disponible para validadr por correo    
+    return render(request,'reporte_interno.html', variables )
+
+
+def listarPedidoInterno(request):    
+    usuario = Usuario.objects.filter(id_rol=3)        
+    listarPedido = Pedido.objects.all()
+    username = ""
+    if request.POST.get('username'):
+        username = str(request.POST.get('username'))
+        u = Usuario.objects.get(username=username)
+        print(u.id_usuario)
+        listarPedido = Pedido.objects.filter(id_usuario=u.id_usuario)    
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(listarPedido,10)
+        listarPedido = paginator.page(page)
+    except:
+        raise Http404    
+    variables={
+        'entity' : listarPedido,
+        'paginator': paginator,
+        'usuario':usuario,
+        'username': username
+    }
+
+    return render(request,'reporte_interno.html', variables )
+
+def listarPedidoExterno(request):    
+    usuario = Usuario.objects.filter(id_rol=4)        
+    listarPedido = Pedido.objects.all()
+    username = ""
+    if request.POST.get('username'):
+        username = str(request.POST.get('username'))
+        u = Usuario.objects.get(username=username)
+        print(u.id_usuario)
+        listarPedido = Pedido.objects.filter(id_usuario=u.id_usuario)    
+    page = request.GET.get('page', 1)
+    try:
+        paginator = Paginator(listarPedido,10)
+        listarPedido = paginator.page(page)
+    except:
+        raise Http404    
+    variables={
+        'entity' : listarPedido,
+        'paginator': paginator,
+        'usuario':usuario,
+        'username': username
+    }
+
+    return render(request,'reporte_externo.html', variables )
+
+
+
+
+
+def solicitud(request):
+    usuario = Usuario.objects.all()
+    if request.method =="POST":   
+       subject =["Nuevo registro"]
+       message ="Para el Rut: " +  request.POST["rut"]  +'\n' +  "Apellido Paterno: " + request.POST["appaterno"] +'\n' + "Apellido Materno "  + request.POST["apmaterno"] +'\n' +  "Nombre usuario: " + request.POST["nombres"] +'\n' +  "Con Direccion en: " + request.POST["direccion"] +'\n' +   "Con numero telefonico:  " + request.POST["telefono"] +'\n' +  "Solicitado para el correo: " + request.POST["correo"] +'\n' +  "Con nombre de usuario: " + request.POST["usuario"]+'\n' +  "Con contraseña solicitada: " + request.POST["contrasena"] +'\n' +  "Del pais: " + request.POST["pais"] +'\n' +  "Para el Rol solicitado de: " + request.POST["id_rol"]
+       email_from = settings.EMAIL_HOST_USER
+       recipient_list=["virtual.feriavirtual2020@gmail.com"]
+       send_mail(subject, message, email_from, recipient_list)
+
+    return render(request, 'solicitud_registro.html',{'usuario':usuario,'mostrarr':listado_pais,'mostrarrol':listado_rol})
+    
+
+##Listado de los roles.
+def listado_rol():
+    djang_cursor = connection.cursor()
+    cursor = djang_cursor.connection.cursor()
+    out_cur = djang_cursor.connection.cursor()
+
+    cursor.callproc("SP_LISTAR_ROLES",  [out_cur])
+
+    lista = []
+    for fila in out_cur:
+        lista.append(fila)
+    return lista
+
+## mostrar paises
+def listado_pais():
+    djang_cursor = connection.cursor()
+    cursor = djang_cursor.connection.cursor()
+    out_cur = djang_cursor.connection.cursor()
+
+    cursor.callproc("SP_LISTAR_PAISES",  [out_cur])
+
+    lista = []
+    for fila in out_cur:
+        lista.append(fila)
+    return lista
+
+##listar PAIS  y registrar CLIENTES
+def rcliente(request):
+    data = {
+        'mostrarr':listado_pais(),
+        'mostrarrol':listado_rol()
+    }
+
+    if request.method == 'POST':
+        rut = request.POST.get('rut')
+        appaterno = request.POST.get('appaterno')
+        apmaterno = request.POST.get('apmaterno')
+        nombres = request.POST.get('nombres')
+        direccion = request.POST.get('direccion')
+        pais = request.POST.get('pais')
+        telefono = request.POST.get('telefono')
+        correo = request.POST.get('correo')
+        id_rol = request.POST.get('id_rol')
+        usuario = request.POST.get('usuario')
+        contrasena = request.POST.get('contrasena')
+        salida = agregar_cliente(rut,appaterno,apmaterno,nombres,direccion,pais,telefono,correo,id_rol,usuario,contrasena)
+
+        if salida == 1:
+            data ['mensaje'] = 'Agregado correctamente'
+        else:
+            data ['mensaje'] = 'No se ha podido guadar'
+
+    return render(request, 'rcliente.html',data)
+
+
+##agregar cliente
+def agregar_cliente(rut,appaterno,apmaterno,nombres,direccion,pais,telefono,correo,id_rol,usuario,contrasena):
+    djang_cursor = connection.cursor()
+    cursor = djang_cursor.connection.cursor()
+    salida =cursor.var(cx_Oracle.NUMBER)
+    cursor.callproc('SP_AGREGAR_CLIENTE', [rut,appaterno,apmaterno,nombres,direccion,pais,telefono,correo,id_rol,usuario,contrasena, salida])
+    return salida.getvalue()

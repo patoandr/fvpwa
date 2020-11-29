@@ -52,7 +52,7 @@ class formUsuario(forms.ModelForm):
         
     class Meta:
         model = Usuario
-        fields = {'id_usuario','rut_usuario','ap_paterno','nombres','id_pais','email','id_rol','username','contrasena'}
+        fields = {'id_usuario','rut_usuario','ap_paterno','ap_materno','nombres','direccion','id_pais','fono','email','id_rol','username','contrasena'}
     
 class formcontrato(forms.ModelForm):
     fecha_termino = forms.DateField()
@@ -71,3 +71,20 @@ class formPedido(forms.ModelForm):
     class Meta:
         model = Pedido
         fields = {'id_pedido','id_usuario','fecha_pedido','fecha_envio','fecha_entrega','nombre_destinatario','id_pais','ciudad_destinatario','direccion_destinatario','fono_destinatario','id_camion','estado_pedido'}
+
+class formrcompra_detalle(forms.ModelForm):
+    class Meta:
+        model = DetallePedido
+        fields = {'id_detalle_pedido','id_pedido','id_producto','precio_unidad','kilos','total'}
+        
+class formSaldos(forms.ModelForm):
+    montos_saldos = forms.IntegerField(min_value=10,max_value=1000000)
+    precio_fruta = forms.IntegerField(min_value=10,max_value=1000000)
+    class Meta:
+        model = Saldos
+        fields = {'id_saldos','montos_saldos','id_nombre', 'precio_fruta'}
+
+class formsaldo_detalle(forms.ModelForm):
+    class Meta:
+        model = SaldosDetalle
+        fields = {'id_saldo_detalle','id_saldos','id_pedido','cantidad','total'}

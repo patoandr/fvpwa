@@ -18,6 +18,12 @@ function soloLetras(e) {
     }
   }
 
+//Función que permite solo Números
+function soloNumeros() {
+  if ((event.keyCode < 48) || (event.keyCode > 57)) 
+   event.returnValue = false;
+ }
+
   function validarContraseña(e) {
     a= document.getElementById("id_password1").value ;
     b = document.getElementById("id_password2").value;
@@ -33,6 +39,20 @@ function soloLetras(e) {
       return false;
     }
 }
+//FUNCION PARA SETEAR FECHA PARA HOYY
+var date = new Date();
+
+var day = date.getDate();
+var month = date.getMonth() + 1;
+var year = date.getFullYear();
+
+if (month < 10) month = "0" + month;
+if (day < 10) day = "0" + day;
+
+var today = year + "-" + month + "-" + day;       
+document.getElementById("theDate").value = today;
+
+//FUNCION QUE MULTIPLICA 2 campos
 
 
       

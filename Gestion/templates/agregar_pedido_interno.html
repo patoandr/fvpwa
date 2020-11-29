@@ -1,0 +1,137 @@
+{% extends 'index.html' %}
+   {% block content %}
+    <div class="container" >
+        <section class="content-section" id="portfolio">
+            <form method="POST">
+                <h2>LISTAR PEDIDO INTERNO</h2>
+                <br>
+                <br>
+                {% csrf_token %}
+                
+                <section>
+                    <h2>Saldos publicados</h2>
+                    <br>
+                    <br>
+                    <br>        
+                    <table class="table table-resposive-lg table table-striped table-hover">
+                        <!-- <thead class="thead-light"> -->
+                            <tr>
+                                <th>CODIGO</th>
+                                <th>FECHA PUBLICACION</th>
+                                <th>SALDO EN FRUTAS</th>
+                                <th>FRUTAS</th>
+                                <th>PRECIO</th>
+                                <th>ACCION</th>
+                            </tr>                    
+                        <!-- </thead>  -->                
+                        {% for s in saldo %}                   
+                            <tr><td>{{s.id_saldos}}</td>
+                                <td>{{s.fecha_publicacion}}</td>
+                                <td>{{s.montos_saldos}} - KG</td>
+                                <td>{{s.id_nombre}}</td>                         
+                                <td>{{s.precio_fruta}}</td>
+                                <td>
+                                    <a href="{% url 'comprarSaldoFruta' s.id_saldos %}"> <button type="button" class="btn btn-outline-primary">Comprar</button> </a>
+                                </td>
+                            </tr> 
+                        {% endfor %}                                            
+                    </table>            
+                </section>
+                <br>
+                <br>
+                <br>
+                <h4>Detalle Pedido</h4>  
+                <!-- Modificar, se agrega value para traer los datos -->
+                <!-- <input type="hidden" name="id_saldos" value="{{ saldoAll.id_saldos }}"> -->
+                <input type="text" name="id_pedido" value="{{ pedido.id_pedido }}">
+
+                <div class="row">
+                    <!-- <div class="col">
+                        <label >Rol:</label>
+                        <select  name="id_saldos" class="form-control" >
+                            {% for s in saldo %}
+                                <option value="{{ s.id_saldos }}">{{ s.id_saldos }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>     -->
+                    <div class="col">
+                        <label for="id_nombre">ID Saldos:</label>
+                        <input type="text" name="id_saldos" readonly class="form-control" required id="id_saldos" value="{{ saldoAll.id_saldos }}">
+                    </div><br>
+                    <!-- <div class="col">
+                        <label for="">Producto Frutas:</label>
+                        <input type="text" name="" readonly class="form-control" required id="id_nombre" value="{{ saldoAll.id_nombre }}">
+                    </div><br> -->
+                    <div class="col">
+                        <label for="montos_saldos">Saldos de la Fruta:</label>
+                        <input onkeypress="return soloNumeros(event)" readonly type="text" name="stock_fruta" class="form-control" value="{{ saldoAll.montos_saldos }}">
+                    </div><br>
+                    <div class="col">
+                        <label for="precio_fruta">Precio:</label>
+                        <input onkeypress="return soloNumeros(event)" readonly type="text" id="uno" name="precio_fruta" class="form-control" value="{{ saldoAll.precio_fruta }}">
+                    </div><br>
+                    <div class="col">
+                        <label for="resta_fruta">Cantidad:</label>
+                        <input onkeypress="return soloNumeros(event)"  type="text" name="cantidad" id="dos" class="form-control" >
+                    <script>
+                        var total = cantidad * precio_fruta;
+                    </script>    
+                    </div><br><div class="col">
+                        <label for="total">TOTAL:</label>
+                        <input onkeypress="return soloNumeros(event)"  type="text" name="total"  id="tres" class="form-control" value="total">
+                    </div><br>
+                    
+                    <div class="col">
+                        <button type="submit" style="margin-top: 30px;" class="btn btn-primary">Confirmar</button>
+                    </div>
+                </div>
+            </form>
+        </section>         
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function(){
+  
+  function multiplicar(){
+    
+    var uno, dos, tres, operacion;
+  
+      uno = $('#uno');
+      dos = $('#dos');
+      tres = $('#tres');
+      
+      operacion = parseInt(uno.val()) * parseInt(dos.val());
+      tres.val(operacion);
+    
+  }
+  
+  $("#uno").keyup(function(){
+      
+      var dos;
+      dos = $('#dos').val();
+      
+      if(dos != ""){
+        multiplicar()
+      }
+      
+  });
+  
+  $("#dos").keyup(function(){
+      
+      var uno;
+      uno = $('#uno').val();
+      
+      if(dos != ""){
+        multiplicar()
+      }
+      
+  });
+  
+ 
+})
+</script>    
+    
+{% endblock content %}

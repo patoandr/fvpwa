@@ -1,4 +1,5 @@
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,6 +21,9 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
   <link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet">
 
+  <!-- Custom CSS -->
+  <link href="{% static 'css/stylish-portfolio.min.css' %}" rel="stylesheet">
+
   <!--Color de la Aplicacion PWA-->
   <meta name="theme-color" content="" />
 
@@ -34,16 +38,11 @@
   <!--Configuracion general de la PWA-->
   <link rel="manifest" href="{% static 'manifest.json' %}" />
 
+   <!-- JQuery -->
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-
-  <!-- Custom CSS -->
-  <link href="{% static 'css/stylish-portfolio.min.css' %}" rel="stylesheet">
-
-  <!-- JQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-  <!--Scripts-->
-  <script src="{% static 'js/main.js' %}"></script>
+   <!--Scripts-->
+   <script src="{% static 'js/main.js' %}"></script>
 
 
 </head>
@@ -344,12 +343,12 @@
         <a class="btn btn-dark btn-xl js-scroll-trigger" href="{% url 'login' %}">INICIAR SESIÓN</a>
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-lg-10 mx-auto">
         <h6>o crea una nueva cuenta!</h6>          
-        <a class="btn btn-dark btn-xl js-scroll-trigger" href="{% url 'registrar_usuarios' %}">REGITRATE AQUI</a>
+        <a class="btn btn-dark btn-xl js-scroll-trigger" href="{% url 'solicitud' %}">SOLICITAR REGISTRO</a>
       </div>
-    </div>
+    </div> -->
   </div>
 </section>
 {% endif %}
@@ -368,7 +367,7 @@
   {% endif %}
 
   <!-- Portfolio -->
-  <section class="content-section" id="portfolio">
+  <!-- <section class="content-section" id="portfolio">
     <div class="container">
       <div class="content-section-heading text-center">
         <h3 class="text-secondary mb-0">Zona clientes</h3>
@@ -423,7 +422,7 @@
     </div>
 
 
-  </section>  
+  </section>   -->
 
 
   <!-- Map -->
@@ -531,6 +530,10 @@
 
   <!-- Funciones -->
   <script src="{% static 'js/funciones.js' %}"></script>
+  <script src="{% static 'js/tienda2.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+  <script src="{% static 'js/validaciones.js' %}"></script>
 
   <!-- Sweetalert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

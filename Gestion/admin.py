@@ -11,10 +11,13 @@ admin.site.register(Usuario)
 admin.site.register(Pais)
 admin.site.register(Contratos)
 admin.site.register(DetallePedido)
+admin.site.register(TipoDetallePedido)
 admin.site.register(Error)
 admin.site.register(Estados)
 admin.site.register(Producto)
 admin.site.register(Region)
 admin.site.register(Roles)
 admin.site.register(Camion)
+admin.site.register(Saldos)
+
 

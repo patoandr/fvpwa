@@ -1,0 +1,121 @@
+{% extends 'index.html' %}
+   {% block content %}
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <div class="container" >
+        <section class="content-section" id="portfolio">
+            <form method="POST">
+                <h2>LISTAR PEDIDO INTERNO</h2>
+                <br>
+                <br>
+                {% csrf_token %}
+                
+                <h4>Datos Cliente</h4>
+                    <!-- Modificar, se agrega value para traer los datos-->
+                    <input type="text" name="id_usuario" id="id_usuario" value="{{ cliente.id_usuario }}">
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="nombre_destinatario">Nombre Cliente:</label>
+                            <input type="text" name="nombre_destinatario" readonly class="form-control" required id="nombre_destinatario" value="{{ cliente.nombres }} {{ cliente.ap_paterno }} {{ cliente.ap_materno }}">
+                        </div><br>
+                        <div class="col">
+                            <label for="email">Correo:</label>
+                            <input  type="email" name="email" class="form-control" value="{{ cliente.email }}">
+                        </div><br>
+                        <div class="col">
+                            <label for="fono_destinatario">Número Contacto:</label>
+                            <input onkeypress="return soloNumeros(event)" type="text" name="fono_destinatario" class="form-control"  value="{{ cliente.fono }}">
+                        </div><br>
+                        <div class="col">
+                            <label for="fecha_pedido">Fecha Pedido:</label>
+                            <input type="date" id="theDate" name="fecha_pedido" class="form-control" >
+                        </div><br>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="id_pais">Pais:</label>
+                            <input type="text" name="id_pais" class="form-control" required id="id_pais" value="1">
+                        </div><br>
+                        <div class="col">
+                            <label for="ciudad_destinatario">Ciudad Destinatario:</label>
+                            <input type="text" name="ciudad_destinatario" class="form-control" >
+                        </div><br>
+                        <div class="col">
+                            <label for="direccion_destinatario">Direccion Destinatario</label>
+                            <input type="text" name="direccion_destinatario" class="form-control">
+                        </div><br>
+                        <div class="col">
+                            <label for="id_camion">ID Camión:</label>
+                            <input onkeypress="return soloNumeros(event)" readonly type="text" name="id_camion" class="form-control"  value="1">
+                        </div><br>
+                        <div class="col">
+                            <label for="estado_pedido">Estado Pedido:</label>
+                            <input onkeypress="return soloNumeros(event)" readonly type="text" name="estado_pedido" class="form-control"  value="22">
+                        </div><br>
+                        <div class="col">
+                            <button type="submit" style="margin-top: 30px;" class="btn btn-primary">Actualizar datos</button>
+                        </div>
+                    </div>
+                  <br>
+                  <br><br>
+                <section>
+                    <h2>Saldos publicados</h2>
+                    <br>
+                    <br>
+                    <br>        
+                    <table class="table table-resposive-lg table table-striped table-hover">
+                        <!-- <thead class="thead-light"> -->
+                            <tr>
+                                <th>FECHA PUBLICACION</th>
+                                <th>SALDO EN FRUTAS</th>
+                                <th>FRUTAS</th>
+                                <th>PRECIO</th>
+                                <th>ACCION</th>
+                            </tr>                    
+                        <!-- </thead>  -->                
+                        {% for s in saldo %}                   
+                            <tr>
+                                <td>{{s.fecha_publicacion}}</td>
+                                <td>{{s.montos_saldos}} - KG</td>
+                                <td>{{s.id_nombre}}</td>                         
+                                <td>{{s.precio_fruta}}</td>
+                                <td>
+                                    <a href="{% url 'comprarSaldoFruta' s.id_saldos %}"> <button type="button" class="btn btn-outline-primary">Comprar</button> </a>
+                                </td>
+                            </tr> 
+                        {% endfor %}                                            
+                    </table>            
+                </section>
+                <br>
+                <br>
+                <br>
+                <!-- <h4>Detalle Pedido</h4>  
+                Modificar, se agrega value para traer los datos
+                <input type="hidden" name="id_saldos" id="id_id_saldos" value="{{ saldoAll.id_saldos }}">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="id_nombre">Producto Frutas:</label>
+                        <input type="text" name="id_nombre" readonly class="form-control" required id="id_nombre" value="{{ saldoAll.id_nombre }}">
+                    </div><br>
+                    <div class="col">
+                        <label for="montos_saldos">Saldos de la Fruta:</label>
+                        <input onkeypress="return soloNumeros(event)" readonly type="text" name="montos_saldos" class="form-control" value="{{ saldoAll.montos_saldos }}">
+                    </div><br>
+                    <div class="col">
+                        <label for="precio_fruta">Precio:</label>
+                        <input onkeypress="return soloNumeros(event)" readonly type="text"  name="precio_fruta" class="form-control" value="{{ saldoAll.precio_fruta }}">
+                    </div><br>
+                    <div class="col">
+                        <label for="resta_fruta">Cantidad:</label>
+                        <input onkeypress="return soloNumeros(event)"  type="text" name="resta_fruta" class="form-control" >
+                    </div><br>
+                    
+                    <div class="col">
+                        <button type="submit" style="margin-top: 30px;" class="btn btn-primary">Al guardete</button>
+                    </div>
+                </div> -->
+            </form>
+        </section>         
+    </div>
+{% endblock content %}

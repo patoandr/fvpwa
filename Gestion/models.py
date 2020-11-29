@@ -53,6 +53,9 @@ class AuthUser(models.Model):
         managed = False
         db_table = 'auth_user'
 
+    def __str__(self):
+        return self.username
+
 
 class AuthUserGroups(models.Model):
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
@@ -75,20 +78,37 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Calidad(models.Model):
-    id_calidad = models.AutoField(primary_key=True)
+    id_calidad = models.BigAutoField(primary_key=True)
     nombre_calidad = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=100)
 
     class Meta:
         managed = False
         db_table = 'calidad'
-
+    
     def __str__(self):
         return self.nombre_calidad
 
 
+class Camion(models.Model):
+    id_camion = models.BigAutoField(primary_key=True)
+    id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario')
+    nombre = models.CharField(max_length=500)
+    descripcion = models.CharField(max_length=500)
+    tamano = models.CharField(max_length=100)
+    capacidad_carga = models.CharField(max_length=100)
+    patente = models.CharField(max_length=10)
+
+    class Meta:
+        managed = False
+        db_table = 'camion'
+
+    def __str__(self):
+        return self.patente
+
+
 class Claves(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     id_origen = models.BigIntegerField()
     tabla_origen = models.CharField(max_length=20)
     nombre = models.CharField(max_length=100)
@@ -98,51 +118,10 @@ class Claves(models.Model):
         managed = False
         db_table = 'claves'
 
-class Roles(models.Model):
-    id_rol = models.AutoField(primary_key=True)
-    descripcion = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'roles'
-
-    def __str__(self):
-     return self.descripcion    
-
-
-class Pais(models.Model):
-    id_pais = models.AutoField(primary_key=True)
-    descripcion = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'pais'        
-
-
-class Usuario(models.Model):
-    id_usuario = models.AutoField(primary_key=True)
-    rut_usuario = models.CharField(max_length=10)
-    ap_paterno = models.CharField(max_length=1000)
-    ap_materno = models.CharField(max_length=1000)
-    nombres = models.CharField(max_length=100)
-    direccion = models.CharField(max_length=1000)
-    id_pais = models.ForeignKey(Pais, models.DO_NOTHING, db_column='id_pais')
-    fono = models.BigIntegerField()
-    email = models.CharField(max_length=100)
-    id_rol = models.ForeignKey(Roles, models.DO_NOTHING, db_column='id_rol')
-    username = models.CharField(max_length=10)
-    contrasena = models.CharField(max_length=10)
-
-    class Meta:
-        managed = False
-        db_table = 'usuario'
-
-    def __str__(self):
-        return self.username
 
 class Contratos(models.Model):
-    id_contrato = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario')
+    id_contrato = models.BigAutoField(primary_key=True)
+    id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario')
     fecha_inicio = models.DateField()
     fecha_termino = models.DateField(blank=True, null=True)
 
@@ -150,11 +129,16 @@ class Contratos(models.Model):
         managed = False
         db_table = 'contratos'
 
+    def __str__(self):
+        return self.id_usuario
+
+    
 
 class DetallePedido(models.Model):
     id_detalle_pedido = models.AutoField(primary_key=True)
     id_pedido = models.OneToOneField('Pedido', models.DO_NOTHING, db_column='id_pedido')
     id_producto = models.ForeignKey('Producto', models.DO_NOTHING, db_column='id_producto')
+    id_tipo_detalle_pedido = models.ForeignKey('TipoDetallePedido', models.DO_NOTHING, db_column='id_tipo_detalle_pedido')
     precio_unidad = models.BigIntegerField(blank=True, null=True)
     kilos = models.BigIntegerField(blank=True, null=True)
     total = models.BigIntegerField(blank=True, null=True)
@@ -163,6 +147,16 @@ class DetallePedido(models.Model):
         managed = False
         db_table = 'detalle_pedido'
 
+class TipoDetallePedido(models.Model):
+    id_tipo_detalle_pedido = models.BigAutoField(primary_key=True)
+    tipo_descripcion = models.CharField(max_length=20)
+
+    class Meta:
+        managed = False
+        db_table = 'tipo_detalle_pedido'
+    
+    def __str__(self):
+        return self.tipo_descripcion
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -207,8 +201,9 @@ class DjangoSession(models.Model):
         managed = False
         db_table = 'django_session'
 
+
 class Error(models.Model):
-    id_error = models.AutoField(primary_key=True)
+    id_error = models.BigAutoField(primary_key=True)
     descripcion = models.CharField(max_length=200)
     tipo_error = models.CharField(max_length=200)
 
@@ -218,16 +213,19 @@ class Error(models.Model):
 
 
 class Estados(models.Model):
-    estado_pedido = models.AutoField(primary_key=True)
+    estado_pedido = models.BigAutoField(primary_key=True)
     descripcion = models.CharField(max_length=20)
 
     class Meta:
         managed = False
         db_table = 'estados'
+        
+    def __str__(self):
+        return self.descripcion
 
 
 class Nombre(models.Model):
-    id_nombre = models.AutoField(primary_key=True)
+    id_nombre = models.BigAutoField(primary_key=True)
     descripcion = models.CharField(max_length=100)
 
     class Meta:
@@ -235,25 +233,24 @@ class Nombre(models.Model):
         db_table = 'nombre'
 
     def __str__(self):
-        return self.descripcion    
+        return self.descripcion
 
-class Camion(models.Model):
-    id_camion = models.AutoField(primary_key=True)
-    id_usuario = models.CharField(max_length=10)
-    nombre = models.CharField(max_length=100)
+
+class Pais(models.Model):
+    id_pais = models.BigAutoField(primary_key=True)
     descripcion = models.CharField(max_length=100)
-    tamano = models.CharField(max_length=100)
-    capacidad_carga = models.CharField(max_length=100)
-    patente = models.CharField(max_length=100)
 
     class Meta:
         managed = False
-        db_table = 'camion'       
+        db_table = 'pais'
+
+    def __str__(self):
+        return self.descripcion
 
 
 class Pedido(models.Model):
-    id_pedido = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario')
+    id_pedido = models.BigAutoField(primary_key=True)
+    id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario')
     fecha_pedido = models.DateField()
     fecha_envio = models.DateField(blank=True, null=True)
     fecha_entrega = models.DateField(blank=True, null=True)
@@ -269,16 +266,19 @@ class Pedido(models.Model):
         managed = False
         db_table = 'pedido'
 
-#import datetime
+    # if fecha_entrega is None:
+    #     print("It doesn't match.")
+
+import datetime
 class Producto(models.Model):
-    id_producto = models.AutoField(primary_key=True)
+    id_producto = models.BigAutoField(primary_key=True)
     id_nombre = models.ForeignKey(Nombre, models.DO_NOTHING, db_column='id_nombre')
-    id_usuario = models.ForeignKey(Usuario, models.DO_NOTHING, db_column='id_usuario')
+    id_usuario = models.ForeignKey('Usuario', models.DO_NOTHING, db_column='id_usuario')
     id_calidad = models.ForeignKey(Calidad, models.DO_NOTHING, db_column='id_calidad')
     kilos_producto = models.BigIntegerField()
     precio_producto = models.BigIntegerField()
     stock_producto = models.BigIntegerField()
-    fecha_ingreso = models.DateField(blank=True, null=True)
+    fecha_ingreso = models.DateField(default=datetime.datetime.now())
     fecha_actualizada = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -290,7 +290,7 @@ class Producto(models.Model):
 
 
 class Region(models.Model):
-    id_region = models.AutoField(primary_key=True)
+    id_region = models.BigAutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
 
     class Meta:
@@ -298,3 +298,59 @@ class Region(models.Model):
         db_table = 'region'
 
 
+class Roles(models.Model):
+    id_rol = models.BigAutoField(primary_key=True)
+    descripcion = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'roles'
+    def __str__(self):
+        return self.descripcion
+
+import datetime
+class Saldos(models.Model):
+    id_saldos = models.BigAutoField(primary_key=True)
+    montos_saldos = models.BigIntegerField(blank=True, null=True)
+    id_nombre = models.ForeignKey(Nombre, models.DO_NOTHING, db_column='id_nombre')#nombre fruta
+    precio_fruta = models.BigIntegerField(blank=True, null=True)
+    fecha_publicacion = models.DateField(default=datetime.datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'saldos'
+
+
+
+class SaldosDetalle(models.Model):
+    id_saldo_detalle = models.AutoField(primary_key=True)
+    id_saldos = models.BigIntegerField(blank=True, null=True)
+    id_pedido = models.BigIntegerField(blank=True, null=True)
+    cantidad = models.BigIntegerField(blank=True, null=True)    
+    total = models.BigIntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'saldos_detalle'
+
+
+class Usuario(models.Model):
+    id_usuario = models.BigAutoField(primary_key=True)
+    rut_usuario = models.CharField(max_length=10)
+    ap_paterno = models.CharField(max_length=100)
+    ap_materno = models.CharField(max_length=100)
+    nombres = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=200)
+    id_pais = models.ForeignKey(Pais, models.DO_NOTHING, db_column='id_pais')
+    fono = models.BigIntegerField()
+    email = models.CharField(max_length=100)
+    id_rol = models.ForeignKey(Roles, models.DO_NOTHING, db_column='id_rol')
+    username = models.CharField(max_length=100)
+    contrasena = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'usuario'
+
+    def __str__(self):
+        return self.username

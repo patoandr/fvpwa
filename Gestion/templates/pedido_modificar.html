@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+    {% block content %}
+    <div class="container" >
+        <section class="content-section" id="portfolio">
+            <form method="POST">
+            <h2>Actualizar Pedido</h2>
+            <br>
+            <br>
+            {% csrf_token %}
+                
+            <!-- Modificar, se agrega value para traer los datos-->
+            <input type="hidden" name="id_pedido" id="id_pedido" value="{{ lp.id_pedido }}">
+
+            <div class="row">
+                <div class="col">
+                    <label for="id_usuario">Usuario:</label>
+                    <input type="text"readonly name="id_usuario"  class="form-control" required id="id_usuario" value="{{ lp.id_usuario }}">
+                </div><br>
+                <div class="col">
+                    <label for="nombre_destinatario">Destinatario:</label>
+                    <input onkeypress="return soloLetras(event)" type="text" name="nombre_destinatario" class="form-control" required id="id_nombre_destinatario" value="{{ lp.nombre_destinatario }}">
+                </div><br>
+                <div class="col">
+                    <label for="fono_destinatario">Telefono:</label>
+                    <input onkeypress="return soloNumeros(event)" type="text" name="fono_destinatario" placeholder="Sólo números..." class="form-control" required id="fono_destinatario" value="{{ lp.fono_destinatario }}">
+                </div><br>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <label for="id_pais">Pais:</label>
+                    <input onkeypress="return soloLetras(event)"  type="text" readonly name="id_pais"  class="form-control" required id="id_pais" value="{{ lp.id_pais }}">
+                </div><br>
+                <div class="col">
+                    <label for="ciudad_destinatario">Ciudad:</label>
+                    <input onkeypress="return soloLetras(event)"  type="text" readonly name="ciudad_destinatario"  class="form-control" required id="ciudad_destinatario" value="{{ lp.ciudad_destinatario }}">
+                </div><br>
+                <div class="col">
+                    <label for="direccion_destinatario">Domicilio:</label>
+                    <input type="text" name="direccion_destinatario"  class="form-control" required id="direccion_destinatario" value="{{ lp.direccion_destinatario }}">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <label for="fecha_pedido">Fecha Pedido:</label>
+                    <input type="text"  readonly name="fecha_pedido"  class="form-control" required id="fecha_pedido" value="{{ lp.fecha_pedido }}">
+                </div>
+                <div class="col">
+                    <label for="fecha_envio">Fecha Envio: {{ lp.fecha_envio}}</label>
+                    <input type="date" name="fecha_envio" class="form-control" value="{{ lp.fecha_envio }}">
+                </div>
+                <div class="col">
+                    <label for="fecha_entrega">Fecha Entrega:</label>
+                    <input type="date" name="fecha_entrega" class="form-control" value="{{ lp.fecha_entrega }}">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="id_camion">Patente Camión:</label>
+                    <input type="text" readonly name="id_camion" class="form-control" maxlength="150" autofocus required id="id_camion" value="{{ lp.id_camion }}">
+                </div>
+                <div class="col-sm-4">
+                    <label for="estado_pedido">Estado Actual: {{lp.estado_pedido}} </label>
+                    <select  name="estado_pedido" class="form-control" required id="estado_pedido">
+                        {% for ep in estado %}
+                            <option id="estado_pedido" value="{{ ep.estado_pedido }}">{{ ep.descripcion }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col">
+                    <button type="submit" style="margin-top: 30px;" class="btn btn-primary">Actualizar</button>
+                </div>
+            </div>
+            </form>
+        </section>         
+    </div>
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div class="container" >  
+        <section class="content-section" id="portfolio">
+            <h2>Publicar saldos</h2><br>
+            <form method="POST">{% csrf_token %}
+                
+                <div class="row">                                       
+                    <div class="col-sm-4">
+                        <label for="id_montos_saldos">Saldos:</label>
+                        <input type="text" name="montos_saldos" class="form-control" required id="id_montos_saldos">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="precio_fruta">Precio Fruta:</label>
+                        <input type="text" name="precio_fruta" class="form-control" required id="precio_fruta">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="id_nombre">Frutas: </label>
+                        <select  name="id_nombre" class="form-control" required id="id_nombre">
+                            {% for f in frutas %}
+                                <option id="id_nombre" value="{{ f.id_nombre  }}">{{ f.descripcion }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                <br>
+                <div class="row">
+                <div class="col">    
+                    <button type="submit" style="margin-top: 30px;" class="save btn btn-primary">Guardar</button>
+                </div>
+                </div><br>  
+            </form>
+        </section>        
+        
+        <section>
+            <h2>Saldos publicados</h2>
+            
+            <table class="table table-resposive-lg table table-striped table-hover">
+                <!-- <thead class="thead-light"> -->
+                    <tr>
+                        <th>KILOS EN SALDO</th>                  
+                        <th>FRUTAS</th>
+                        <th>PRECIO</th>
+                        <th>FECHA PUBLICACION</th>
+                        <th>ACCION</th>
+                    </tr>                    
+                <!-- </thead>  -->                
+                {% for s in saldos %}                   
+                    <tr>
+                        <td>{{s.montos_saldos}}</td>
+                        <td>{{s.id_nombre}}</td>
+                        <td>{{s.precio_fruta}}</td>
+                        <td>{{s.fecha_publicacion}}</td>
+                        <td>
+                            <a href="{% url 'modify_saldos' s.id_saldos %}"> <button type="button" class="btn btn-outline-primary">Editar</button> </a>
+                            <a href="{% url 'delete_saldos' s.id_saldos %}"> <button type="button" class="btn btn-outline-danger">Eliminar</button> </a>
+                            <!-- <a href="#" onclick="eliminarUsuario({{ a.username }})" class="btn btn-outline-danger"> Eliminar </a> -->
+                        </td>
+
+                    </tr> 
+                {% endfor %}                                            
+            </table>            
+        </section>	                
+    </div>
+{% endblock content %}

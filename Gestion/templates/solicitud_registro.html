@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Feria Virtual</title>
+	<meta charset="UTF-8">
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1"   >
+
+  <!-- Bootstrap Core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+  <!-- <link href="{% static 'css/fondo.css' %}" rel="stylesheet"> -->
+
+  <!-- Custom Fonts -->
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %} " rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="{% static 'vendor/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="{% static 'css/stylish-portfolio.min.css' %}" rel="stylesheet">
+
+	
+</head>
+<body>
+	<div class="container">
+		<section class="content-section" id="portfolio">
+
+		  <h2>Formulario de Solicitud para nuevos Usuarios</h2><br>
+		
+			<form action="/solicitud/" method="POST" class="form-register">
+				{% csrf_token %}
+				<div class="row"> 
+					<div class= "col">
+					<input type="text" name="rut" placeholder="Rut sin guiones"  class="form-control" required="">
+					</div>
+					<div class= "col">
+					<input type="text" name="appaterno" placeholder="Apellido Paterno"  class="form-control" required="">
+					</div>  
+				</div>
+				<br>
+				<div class="row"> 
+					<div class= "col">
+					<input type="text" name="apmaterno" placeholder="Apellido Materno"  class="form-control" required="">	
+					</div>  
+					<div class= "col">
+					<input type="text" name="nombres" placeholder="Nombres"  class="form-control" required="">
+					</div> 
+				</div>
+				<br>
+				<div class="row"> 
+					<div class= "col">
+					<input type="text" name="direccion" placeholder="Direcion"  class="form-control" required="">	
+					</div>
+					<div class= "col">
+					<input type="text" name="telefono" placeholder="telefono"  class="form-control" required="">	
+					</div>
+				</div>
+				<br>
+				<div class="row"> 
+					<div class= "col">	
+					<input type="email" name="correo" placeholder="Correo" class="form-control" required=""  >
+					</div>
+					<div class= "col">	
+					<input type="text" name="usuario" placeholder="usuario"  class="form-control"required="">	
+					</div>
+				</div>
+				<br>
+				<div class="row"> 
+					<div class= "col">		
+					<input type="password" name="contrasena" placeholder="Contraseña"  class="form-control" required=""  >
+					</div>
+					<br>  <br>
+					<br>  <br>
+				</div>
+				<br>	 
+						<div class="row"> 
+							<div class= "col">	
+								<select  class="form-control" name="pais" required="">
+									<option value="">Seleccione pais</option>
+									{% for c in mostrarr %}
+										<option value="{{c.1}}">{{c.1}}</option>
+									{% endfor %}
+								</select> 
+							</div>
+							<div class= "col">
+								<select  class="form-control" name="id_rol" required="">
+									<option value="">Seleccione Rol</option>
+									{% for c in mostrarrol %}
+							
+									<option value="{{c.1}}">{{c.1}}</option>
+								{% endfor %}
+								</select> 
+							</div>
+							<br>  <br>
+							<br>  <br>	
+						</div>
+						<br>
+                        <input type="submit" value="Enviar Solicitud">
+                        <a href="{% url 'index' %}"> <i class="far fa-hand-point-left">Volver</i> </a>    
+			</form>
+		  {{mensaje}}
+		</section>
+	</div>
+
+</body>
+</html>

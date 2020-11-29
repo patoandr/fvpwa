@@ -1,0 +1,20 @@
+
+----------------------------------------------------------------------
+
+###LIstar los paises del combox TENER TABLA LLENA
+
+create or replace procedure sp_listar_paises(pais out SYS_REFCURSOR)
+is
+begin
+    open pais for select * from pais;
+end;
+
+--------------------------------------------------
+
+#### Listar los roles TENER TABLA LLENA
+
+create or replace procedure sp_listar_roles(rol out SYS_REFCURSOR)
+is
+begin
+    open rol for select * from roles where id_rol  between 3 and 4;
+end;
